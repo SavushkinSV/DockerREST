@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    image: postgres:16.4
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "25500:5432"
+    restart: always
+    volumes:
+      - ./db:/var/lib/postgresql/data
+
+  server:
+    image: tomcat:latest
+    ports:
+      - "8081:8080"
+    restart: always
+    volumes:
+      - ./target:/usr/local/tomcat/webapps
+volumes:
+    db:
+      driver: local
+
+
+#  docker-compose up -d --build --force-recreate
+#  docker-compose exec db bash
+#  docker-compose down
+#  docker-compose ps
