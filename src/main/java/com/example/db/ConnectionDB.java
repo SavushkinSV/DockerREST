@@ -10,10 +10,29 @@ import java.sql.SQLException;
  * Устанавливает соединение с базой данных.
  */
 public class ConnectionDB {
+    private static ConnectionDB instance;
     private static final String DB_DRIVER_CLASS_NAME = PropertiesUtil.getProperty("db.driver-class-name");
-    private static final String DB_URL = PropertiesUtil.getProperty("db.url");
+    private static final String DB_PORT = PropertiesUtil.getProperty("db.local_port");
+    private static final String DB_NAME = PropertiesUtil.getProperty("db.name");
+    private static final String DB_URL = PropertiesUtil.getProperty("db.url") + DB_PORT + "/" + DB_NAME;
     private static final String DB_USER = PropertiesUtil.getProperty("db.user");
     private static final String DB_PASSWORD = PropertiesUtil.getProperty("db.password");
+
+    private ConnectionDB() {
+    }
+
+    /**
+     * Возвращает объект класса {@code ConnectionDB}.
+     *
+     * @return объект класса
+     */
+    public static ConnectionDB getInstance() {
+        if (instance == null) {
+            instance = new ConnectionDB();
+        }
+
+        return instance;
+    }
 
     /**
      * Устанавливает соединение с базой данных.

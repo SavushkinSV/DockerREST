@@ -1,19 +1,23 @@
 package com.example.models;
 
-public class Leaner {
+import java.util.List;
+
+public class Learner {
     private Long id;
     private String firstName;
     private String lastName;
     private String classCode;
+    private List<Subject> subjectList;
 
-    public Leaner() {
+    public Learner() {
     }
 
-    public Leaner(Long id, String firstName, String lastName, String classCode) {
+    public Learner(Long id, String firstName, String lastName, String classCode, List<Subject> subjectList) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.classCode = classCode;
+        this.subjectList = subjectList;
     }
 
     public Long getId() {
@@ -46,5 +50,13 @@ public class Leaner {
 
     public void setClassCode(String classCode) {
         this.classCode = classCode;
+    }
+
+    public List<Subject> getSubjectList() {
+        return subjectList;
+    }
+
+    public void setSubjectList(List<Subject> subjectList) {
+        this.subjectList = subjectList;
     }
 }

@@ -39,3 +39,6 @@ build/
 
 ### Idea ###
 .idea
+
+### DB ###
+db/
