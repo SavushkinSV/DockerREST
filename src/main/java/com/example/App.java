@@ -1,12 +1,16 @@
 package com.example;
 
-import com.example.db.ConnectionDB;
+import com.example.db.ConnectionManagerImpl;
 
-import com.example.utils.InitSQLUtil;
+import com.example.db.IConnectionManager;
+import com.example.util.InitSQLUtil;
+
+import java.sql.SQLException;
 
 public class App {
-    public static void main(String[] args) {
-        ConnectionDB connection = ConnectionDB.getInstance();
-        InitSQLUtil.initSQL(connection.getConnection());
+    public static void main(String[] args) throws SQLException {
+        IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
+        InitSQLUtil.initSQLScheme(connectionManager);
+        InitSQLUtil.initSQLData(connectionManager);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,13 +11,24 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
     private static final Properties PROPERTIES = new Properties();
+    private static final String PROPERTIES_FILE = "db.properties";
 
     static {
+        loadProperties();
+    }
+
+    private PropertiesUtil() {
+    }
+
+    /**
+     * Считывает список свойств (пары ключей и элементов) из файла.
+     */
+    private static void loadProperties() {
         try {
-            InputStream stream = PropertiesUtil.class.getClassLoader().getResourceAsStream("db.properties");
+            InputStream stream = PropertiesUtil.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE);
             PROPERTIES.load(stream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new IllegalStateException();
         }
     }
 

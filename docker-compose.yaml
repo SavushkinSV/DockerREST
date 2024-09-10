@@ -2,6 +2,7 @@ version: '3'
 services:
   db:
     image: postgres:16.4
+    container_name: postgres_container
     env_file:
       - .env
     environment:
@@ -11,11 +12,12 @@ services:
     ports:
       - "25500:5432"
     restart: always
-    volumes:
-      - ./db:/var/lib/postgresql/data
+#    volumes:
+#      - ./db:/var/lib/postgresql/data
 
   server:
     image: tomcat:latest
+    container_name: tomcat_container
     ports:
       - "8080:8080"
     restart: always

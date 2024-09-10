@@ -1,13 +1,18 @@
-package com.example.models;
+package com.example.model;
 
-public class Class {
+/**
+ * Сущность учебный класс, в которых учатся ученики.
+ * Связи:
+ * One To Many: ClassRoom -> Learners
+ */
+public class ClassRoom {
     private Long id;
     private String classCode;
 
-    public Class() {
+    public ClassRoom() {
     }
 
-    public Class(Long id, String classCode) {
+    public ClassRoom(Long id, String classCode) {
         this.id = id;
         this.classCode = classCode;
     }

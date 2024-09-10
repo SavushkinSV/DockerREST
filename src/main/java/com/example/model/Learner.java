@@ -1,23 +1,29 @@
-package com.example.models;
+package com.example.model;
 
 import java.util.List;
 
+/**
+ * Сушность ученик.
+ * Связи:
+ * Many To One -> classRoom
+ * Mane To Many <-> Rating
+ */
 public class Learner {
     private Long id;
     private String firstName;
     private String lastName;
-    private String classCode;
-    private List<Subject> subjectList;
+    private ClassRoom classRoom;
+    private List<Rating> ratingList;
 
     public Learner() {
     }
 
-    public Learner(Long id, String firstName, String lastName, String classCode, List<Subject> subjectList) {
+    public Learner(Long id, String firstName, String lastName, ClassRoom classRoom, List<Rating> ratingList) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.classCode = classCode;
-        this.subjectList = subjectList;
+        this.classRoom = classRoom;
+        this.ratingList = ratingList;
     }
 
     public Long getId() {
@@ -44,19 +50,19 @@ public class Learner {
         this.lastName = lastName;
     }
 
-    public String getClassCode() {
-        return classCode;
+    public ClassRoom getClassRoom() {
+        return classRoom;
     }
 
-    public void setClassCode(String classCode) {
-        this.classCode = classCode;
+    public void setClassRoom(ClassRoom classRoom) {
+        this.classRoom = classRoom;
     }
 
-    public List<Subject> getSubjectList() {
-        return subjectList;
+    public List<Rating> getRatingList() {
+        return ratingList;
     }
 
-    public void setSubjectList(List<Subject> subjectList) {
-        this.subjectList = subjectList;
+    public void setRatingList(List<Rating> ratingtList) {
+        this.ratingList = ratingtList;
     }
 }
