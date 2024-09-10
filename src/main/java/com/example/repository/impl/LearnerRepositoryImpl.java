@@ -2,7 +2,6 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
-import com.example.exception.RepositoryException;
 import com.example.model.Learner;
 import com.example.model.Rating;
 import com.example.repository.LearnerRepository;
@@ -10,11 +9,10 @@ import com.example.repository.LearnerRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class LearnerRepositoryImpl implements LearnerRepository {
     private static LearnerRepositoryImpl instance;
-    private final IConnectionManager connectionDB = ConnectionManagerImpl.getInstance();
+    private static final IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
 
     private LearnerRepositoryImpl() {
     }
@@ -24,7 +22,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      *
      * @return экземпляр объекта
      */
-    public static synchronized LearnerRepository getInstance() {
+    public static LearnerRepository getInstance() {
         if (instance == null) {
             instance = new LearnerRepositoryImpl();
         }
@@ -44,7 +42,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     @Override
     public Learner add(Learner learner) {
         String ADD_SQL = "INSERT INTO learners (first_name, last_name, class_code) VALUES (?, ?, ?);";
-        try (Connection connection = connectionDB.getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, learner.getFirstName());
@@ -64,10 +62,10 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                         learner.getLastName(),
                         learner.getClassRoom(),
                         null
-                        );
+                );
             }
         } catch (SQLException e) {
-            throw new RepositoryException(e);
+            throw new RuntimeException(e);
         }
 
 
@@ -76,7 +74,6 @@ public class LearnerRepositoryImpl implements LearnerRepository {
 
     /**
      * Сохраняет список оценок.
-     *
      *
      * @param learner объект ученик
      */
@@ -92,10 +89,10 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     }
 
     @Override
-    public Optional<Learner> getById(Long id) {
+    public Learner getById(Long id) {
         String FIND_BY_ID_SQL = "SELECT learner_id, first_name, last_name, class_code FROM learners WHERE learner_id = ?";
         Learner leaner = null;
-        try (Connection connection = connectionDB.getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -103,10 +100,10 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 leaner = createLearner(resultSet);
             }
         } catch (SQLException e) {
-            throw new RepositoryException(e);
+            throw new RuntimeException(e);
         }
 
-        return Optional.ofNullable(leaner);
+        return leaner;
     }
 
 
@@ -120,11 +117,16 @@ public class LearnerRepositoryImpl implements LearnerRepository {
 
     }
 
+    /**
+     * Возвращает список всех сущностей.
+     *
+     * @return список сущностей
+     */
     @Override
     public List<Learner> getAll() {
         String FIND_ALL_SQL = "SELECT learner_id, first_name, last_name, class_code FROM learners";
         List<Learner> learnerList = new ArrayList<>();
-        try (Connection connection = connectionDB.getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -132,19 +134,20 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 learnerList.add(createLearner(resultSet));
             }
         } catch (SQLException e) {
-            throw new RepositoryException(e);
+            throw new RuntimeException(e);
         }
 
         return learnerList;
     }
 
     /**
-     * Создает новую сущность учение по запросу.
+     * Создает новую сущность по запросу.
+     *
      * @param resultSet результат запроса
-     * @return сущность учение
+     * @return сущность
      * @throws SQLException
      */
-    private Learner createLearner(ResultSet resultSet) throws SQLException {
+    private static Learner createLearner(ResultSet resultSet) throws SQLException {
         Long learnerId = resultSet.getLong("learner_id");
 
         return new Learner(

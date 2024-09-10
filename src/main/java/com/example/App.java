@@ -11,6 +11,5 @@ public class App {
     public static void main(String[] args) throws SQLException {
         IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
         InitSQLUtil.initSQLScheme(connectionManager);
-        InitSQLUtil.initSQLData(connectionManager);
     }
 }

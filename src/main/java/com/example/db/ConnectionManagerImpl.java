@@ -1,6 +1,5 @@
 package com.example.db;
 
-import com.example.exception.DataBaseDriverLoadException;
 import com.example.util.PropertiesUtil;
 
 import java.sql.Connection;
@@ -50,7 +49,8 @@ public class ConnectionManagerImpl implements IConnectionManager {
             Class.forName(driverClass);
             System.out.println("Database driver loaded.");
         } catch (ClassNotFoundException e) {
-            throw new DataBaseDriverLoadException("Database driver not loaded.");
+            System.out.println("Database driver not loaded.");
+            throw new RuntimeException(e);
         }
     }
 

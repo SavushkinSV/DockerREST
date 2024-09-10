@@ -1,7 +1,6 @@
-package repository;
+package com.example.repository;
 
 import com.example.model.Learner;
-import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.util.PropertiesUtil;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -16,18 +15,13 @@ import org.testcontainers.ext.ScriptUtils;
 import org.testcontainers.jdbc.JdbcDatabaseDelegate;
 import org.testcontainers.junit.jupiter.Container;
 
-import java.util.Optional;
-
-
 public class LearnerRepositoryImplTest {
-    private static final String INIT_SQL = "sql/schema.sql";
-
+    private static final String INIT_PATH = "db-migration.sql";
     private static final String DB_NAME = PropertiesUtil.getProperty("db.name");
     private static final String DB_USER = PropertiesUtil.getProperty("db.user");
     private static final String DB_PASSWORD = PropertiesUtil.getProperty("db.password");
     private static final int DB_CONTAINER_PORT = Integer.parseInt(PropertiesUtil.getProperty("db.container_port"));
     private static final int DB_LOCAL_PORT = Integer.parseInt(PropertiesUtil.getProperty("db.local_port"));
-
 
     private static final LearnerRepository learnerRepository = LearnerRepositoryImpl.getInstance();
     public static JdbcDatabaseDelegate databaseDelegate;
@@ -41,7 +35,7 @@ public class LearnerRepositoryImplTest {
             .withCreateContainerCmdModifier(cmd -> cmd.withHostConfig(
                     new HostConfig().withPortBindings(new PortBinding(Ports.Binding.bindPort(DB_LOCAL_PORT), new ExposedPort(DB_CONTAINER_PORT)))
             ))
-            .withInitScript(INIT_SQL);
+            .withInitScript(INIT_PATH);
 
     @BeforeAll
     public static void beforeAll() {
@@ -51,7 +45,7 @@ public class LearnerRepositoryImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        ScriptUtils.runInitScript(databaseDelegate, "sql/schema.sql");
+        ScriptUtils.runInitScript(databaseDelegate, INIT_PATH);
     }
 
     @AfterAll
@@ -60,22 +54,19 @@ public class LearnerRepositoryImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {
-            "1; true",
-            "4; true",
-            "10; false"
-    }, delimiter = ';')
-    public void getByIdTest(Long expectedId, Boolean expectedValue) {
-        Optional<Learner> learner = learnerRepository.getById(expectedId);
-        Assertions.assertEquals(expectedValue, learner.isPresent());
-        learner.ifPresent(value -> Assertions.assertEquals(expectedId, value.getId()));
+    @CsvSource(value = {"1", "3", "5"})
+    public void getByIdTest(Long expectedId) {
+        Learner learner = learnerRepository.getById(expectedId);
+
+        Assertions.assertNotNull(learner);
+        Assertions.assertEquals(expectedId, learner.getId());
     }
 
     @Test
     public void getByIdNegativeTest() {
-        Optional<Learner> learner = learnerRepository.getById(15L);
+       Learner learner = learnerRepository.getById(15L);
 
-        Assertions.assertFalse(learner.isPresent());
+        Assertions.assertNull(learner);
     }
 
     @Test

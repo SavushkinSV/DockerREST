@@ -1,6 +1,6 @@
 package com.example.model;
 
-public class Rating {
+public class Subject {
     private Long id;
     private String name;
 
