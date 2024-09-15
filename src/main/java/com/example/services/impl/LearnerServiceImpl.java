@@ -40,4 +40,10 @@ public class LearnerServiceImpl implements LearnerService {
 
         return learnerRepository.getAll();
     }
+
+    @Override
+    public Learner add(Learner learner) {
+
+        return learnerRepository.add(learner);
+    }
 }

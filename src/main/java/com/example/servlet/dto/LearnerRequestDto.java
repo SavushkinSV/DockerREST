@@ -36,4 +36,14 @@ public class LearnerRequestDto {
     public ClassRoom getClassRoom() {
         return classRoom;
     }
+
+    @Override
+    public String toString() {
+        return "LearnerRequestDto{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", classRoom=" + classRoom +
+                '}';
+    }
 }

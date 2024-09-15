@@ -47,14 +47,14 @@ public class LearnerRepositoryImpl implements LearnerRepository {
             if (learner.getClassRoom() == null) {
                 preparedStatement.setNull(3, Types.NULL);
             } else {
-                preparedStatement.setString(3, learner.getClassRoom().getClassCode());
+                preparedStatement.setLong(3, learner.getClassRoom().getId());
             }
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 learner = new Learner(
-                        resultSet.getLong("learner_id"),
+                        resultSet.getLong("id"),
                         learner.getFirstName(),
                         learner.getLastName(),
                         learner.getClassRoom(),
@@ -64,7 +64,6 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
 
         return learner;
     }
@@ -189,5 +188,4 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 null
         );
     }
-
 }

@@ -29,7 +29,13 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper{
      */
     @Override
     public Learner map(LearnerRequestDto requestDto) {
-        return null;
+        return new Learner(
+                null,
+                requestDto.getFirstName(),
+                requestDto.getLastName(),
+                requestDto.getClassRoom(),
+                null
+        );
     }
 
     /**
