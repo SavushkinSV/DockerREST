@@ -1,64 +1,83 @@
-DROP TABLE IF EXISTS classes CASCADE;
+DROP TABLE IF EXISTS class_rooms CASCADE;
 DROP TABLE IF EXISTS subjects CASCADE;
 DROP TABLE IF EXISTS learners CASCADE;
 DROP TABLE IF EXISTS ratings CASCADE;
+DROP TABLE IF EXISTS learner_ratings CASCADE;
 
-CREATE TABLE IF NOT EXISTS classes
+CREATE TABLE IF NOT EXISTS class_rooms
 (
-    class_id   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    class_code   VARCHAR(10) NOT NULL UNIQUE
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    code VARCHAR (10) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS subjects
 (
-    subject_id   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    subject_name VARCHAR(255) NOT NULL UNIQUE
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR (255) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS learners
 (
-    learner_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    first_name  VARCHAR(255) NOT NULL,
-    last_name   VARCHAR(255) NOT NULL,
-    class_code  VARCHAR(10) REFERENCES classes (class_code)
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    first_name VARCHAR (255) NOT NULL,
+    last_name VARCHAR (255) NOT NULL,
+    class_id BIGINT REFERENCES class_rooms (id)
 );
 
 CREATE TABLE IF NOT EXISTS ratings
 (
-    rating_id       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    rating_data     DATE NOT NULL,
-    rating_value    INT NOT NULL,
-    subject_name    VARCHAR(255) NOT NULL REFERENCES subjects (subject_name),
-    learner_id     BIGINT NOT NULL REFERENCES learners (learner_id)
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data DATE NOT NULL,
+    value INT NOT NULL,
+    name VARCHAR (255) NOT NULL REFERENCES subjects (name)
 );
 
-INSERT INTO classes (class_code)
-VALUES  ('1а'),
-        ('1б'),
-        ('1в'),
-        ('2а'),
-        ('2б');
+CREATE TABLE IF NOT EXISTS learner_ratings
+(
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    learner_id BIGINT REFERENCES learners (id),
+    rating_id BIGINT REFERENCES ratings (id)
+);
 
-INSERT INTO subjects (subject_name)
-VALUES  ('Русский язык'),
-        ('Литература'),
-        ('Математика'),
-        ('Чтение'),
-        ('Изобразительное искусство');
+INSERT INTO class_rooms (code)
+VALUES ('1а'),
+       ('1б'),
+       ('1в'),
+       ('2а'),
+       ('2б');
 
-INSERT INTO learners (first_name, last_name, class_code)
-VALUES  ('Ксения', 'Урусова', '1а'),
-        ('Леонид', 'Вергун', '1а'),
-        ('Татьяна', 'Марченко', '1б'),
-        ('Михаил', 'Потапов', '1б'),
-        ('Екатерина', 'Назарова', '2а');
+INSERT INTO subjects (name)
+VALUES ('Русский язык'),
+       ('Литература'),
+       ('Математика'),
+       ('Чтение'),
+       ('Изобразительное искусство');
 
-INSERT INTO ratings (rating_data, rating_value, subject_name, learner_id)
-VALUES  ('01-09-2024', 5, 'Русский язык', 1),
-        ('01-09-2024', 4, 'Математика', 3),
-        ('01-09-2024', 5, 'Чтение', 5),
-        ('01-09-2024', 4, 'Литература', 3),
-        ('02-09-2024', 5, 'Чтение', 1),
-        ('02-09-2024', 5, 'Чтение', 4),
-        ('02-09-2024', 4, 'Изобразительное искусство', 4),
-        ('02-09-2024', 3, 'Русский язык', 2);
+INSERT INTO learners (first_name, last_name, class_id)
+VALUES ('Ксения', 'Урусова', 1),
+       ('Леонид', 'Вергун', 1),
+       ('Татьяна', 'Марченко', 2),
+       ('Михаил', 'Потапов', 2),
+       ('Екатерина', 'Назарова', 3),
+       ('Test', 'Test', 3);
+
+INSERT INTO ratings (data, value, name)
+VALUES ('01-09-2024', 5, 'Русский язык'),
+       ('01-09-2024', 4, 'Математика'),
+       ('01-09-2024', 5, 'Чтение'),
+       ('01-09-2024', 4, 'Литература'),
+       ('02-09-2024', 5, 'Чтение'),
+       ('02-09-2024', 5, 'Чтение'),
+       ('02-09-2024', 4, 'Изобразительное искусство'),
+       ('02-09-2024', 3, 'Русский язык');
+
+INSERT INTO learner_ratings (learner_id, rating_id)
+VALUES (1, 1),
+       (3, 2),
+       (5, 3),
+       (3, 4),
+       (1, 5),
+       (4, 6),
+       (4, 7),
+       (2, 8);
+

@@ -1,6 +1,5 @@
 package com.example.repository;
 
-import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.util.PropertiesUtil;

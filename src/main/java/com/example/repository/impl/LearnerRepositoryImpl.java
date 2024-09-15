@@ -31,14 +31,14 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     }
 
     /**
-     * Добавляет в базу данных сущность ученик.
+     * Добавляет в базу данных сущность.
      *
-     * @param learner сущность ученик
-     * @return сущность ученик
+     * @param learner сущность
+     * @return сущность
      */
     @Override
     public Learner add(Learner learner) {
-        String ADD_SQL = "INSERT INTO learners (first_name, last_name, class_code) VALUES (?, ?, ?);";
+        String ADD_SQL = "INSERT INTO learners (first_name, last_name, class_id) VALUES (?, ?, ?);";
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);
 
@@ -87,7 +87,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
 
     @Override
     public Learner getById(Long id) {
-        String FIND_BY_ID_SQL = "SELECT learner_id, first_name, last_name, class_code FROM learners WHERE learner_id = ?";
+        String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
         Learner leaner = null;
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);
@@ -110,7 +110,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     @Override
     public void update(Learner learner) {
-        String UPDATE_SQL = "UPDATE learners SET first_name = ?, last_name = ?, class_code =? WHERE learner_id = ?;";
+        String UPDATE_SQL = "UPDATE learners SET first_name=?, last_name=?, class_id=? WHERE id=?;";
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
             preparedStatement.setString(1, learner.getFirstName());
@@ -135,7 +135,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     @Override
     public boolean deleteById(Long id) {
         boolean result = false;
-        String DELETE_SQL = "DELETE FROM learners WHERE learner_id = ?;";
+        String DELETE_SQL = "DELETE FROM learners WHERE id = ?;";
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
             preparedStatement.setLong(1, id);
@@ -155,7 +155,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     @Override
     public List<Learner> getAll() {
-        String FIND_ALL_SQL = "SELECT learner_id, first_name, last_name, class_code FROM learners";
+        String FIND_ALL_SQL = "SELECT id, first_name, last_name, class_id FROM learners;";
         List<Learner> learnerList = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
@@ -179,7 +179,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      * @throws SQLException
      */
     private static Learner createLearner(ResultSet resultSet) throws SQLException {
-        Long learnerId = resultSet.getLong("learner_id");
+        Long learnerId = resultSet.getLong("id");
 
         return new Learner(
                 learnerId,

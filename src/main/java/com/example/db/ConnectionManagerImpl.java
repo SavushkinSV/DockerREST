@@ -63,7 +63,7 @@ public class ConnectionManagerImpl implements IConnectionManager {
      *
      * @return соединение с базой данных
      * @throws ClassNotFoundException если класс не найден
-     *                                * @throws SQLException           если произошла ошибка доступа к базе данных или URL-адрес имеет значение NULL
+     * @throws SQLException           если произошла ошибка доступа к базе данных или URL-адрес имеет значение NULL
      */
     public Connection getConnection() {
         String url = PropertiesUtil.getProperty(DB_CONTAINER_URL_KEY) +
