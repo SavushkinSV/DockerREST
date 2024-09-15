@@ -59,8 +59,9 @@ public class SubjectRepositoryImpl implements SubjectRepository {
      * @param id идентификатор
      */
     @Override
-    public void delete(Long id) {
+    public boolean deleteById(Long id) {
 
+        return false;
     }
 
     /**

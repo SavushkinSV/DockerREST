@@ -5,6 +5,8 @@ import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.services.LearnerService;
 
+import java.util.List;
+
 public class LearnerServiceImpl implements LearnerService {
     private static final LearnerRepository learnerRepository = LearnerRepositoryImpl.getInstance();
 
@@ -31,5 +33,11 @@ public class LearnerServiceImpl implements LearnerService {
     public Learner getById(Long id) {
 
         return learnerRepository.getById(id);
+    }
+
+    @Override
+    public List<Learner> getAll() {
+
+        return learnerRepository.getAll();
     }
 }

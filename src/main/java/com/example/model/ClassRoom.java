@@ -1,13 +1,16 @@
 package com.example.model;
 
+import java.util.List;
+
 /**
  * Сущность учебный класс, в которых учатся ученики.
  * Связи:
- * One To Many: ClassRoom -> Learners
+ * OneToMany: ClassRoom -> Learner
  */
 public class ClassRoom {
     private Long id;
     private String classCode;
+    private List<Learner> learnerList;
 
     public ClassRoom() {
     }

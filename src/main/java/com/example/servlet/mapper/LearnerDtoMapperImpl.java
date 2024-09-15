@@ -4,6 +4,9 @@ import com.example.model.Learner;
 import com.example.servlet.dto.LearnerRequestDto;
 import com.example.servlet.dto.LearnerResponseDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LearnerDtoMapperImpl implements LearnerDtoMapper{
     private static LearnerDtoMapper instance;
 
@@ -18,13 +21,39 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper{
         return instance;
     }
 
+    /**
+     * Принимает запрос.
+     *
+     * @param requestDto
+     * @return
+     */
     @Override
     public Learner map(LearnerRequestDto requestDto) {
         return null;
     }
 
+    /**
+     *  Направляет ответ.
+     *
+     * @param learner сущность
+     * @return DTO
+     */
     @Override
-    public LearnerResponseDto map(Learner entity) {
-        return null;
+    public LearnerResponseDto map(Learner learner) {
+        return new LearnerResponseDto(
+                learner.getId(),
+                learner.getFirstName(),
+                learner.getLastName(),
+                null,
+                null
+        );
+    }
+
+    @Override
+    public List<LearnerResponseDto> map(List<Learner> learnerList) {
+        List<LearnerResponseDto> learnerResponseDtoList = new ArrayList<>();
+        learnerResponseDtoList = learnerList.stream().map(this::map).toList();
+
+        return learnerResponseDtoList;
     }
 }

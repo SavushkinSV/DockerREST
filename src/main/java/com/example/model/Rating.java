@@ -1,11 +1,19 @@
 package com.example.model;
 
+import java.util.List;
+
+/**
+ * Сущность оценки.
+ * Связи:
+ * ManeToMany <-> Learner
+ */
 public class Rating {
     private Long id;
     private String date;
     private Integer value;
     private String subjectName;
     private Long leanerId;
+    private List<Learner> learnerList;
 
     public Rating() {
     }
@@ -56,5 +64,13 @@ public class Rating {
 
     public void setLeanerId(Long leanerId) {
         this.leanerId = leanerId;
+    }
+
+    public List<Learner> getLearnerList() {
+        return learnerList;
+    }
+
+    public void setLearnerList(List<Learner> learnerList) {
+        this.learnerList = learnerList;
     }
 }

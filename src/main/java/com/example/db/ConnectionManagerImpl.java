@@ -20,7 +20,6 @@ public class ConnectionManagerImpl implements IConnectionManager {
     private static final String DB_USER_KEY = "db.user";
     private static final String DB_PASSWORD_KEY = "db.password";
 
-
     private ConnectionManagerImpl() {
     }
 

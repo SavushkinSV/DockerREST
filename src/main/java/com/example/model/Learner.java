@@ -3,10 +3,10 @@ package com.example.model;
 import java.util.List;
 
 /**
- * Сушность ученик.
+ * Сущность ученик.
  * Связи:
- * Many To One -> classRoom
- * Mane To Many <-> Rating
+ * ManyToOne -> classRoom
+ * ManeToMany <-> Rating
  */
 public class Learner {
     private Long id;

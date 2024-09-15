@@ -32,9 +32,6 @@ public class LearnerRepositoryImpl implements LearnerRepository {
 
     /**
      * Добавляет в базу данных сущность ученик.
-     * 1. Сохраняет ученика
-     * 2. Сохраняет класс, в котором учится ученик
-     * 3. Сохраняет список предметов
      *
      * @param learner сущность ученик
      * @return сущность ученик
@@ -106,15 +103,49 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         return leaner;
     }
 
-
+    /**
+     * Обновляет сущность.
+     *
+     * @param learner сущность
+     */
     @Override
-    public void update(Learner entity) {
-
+    public void update(Learner learner) {
+        String UPDATE_SQL = "UPDATE learners SET first_name = ?, last_name = ?, class_code =? WHERE learner_id = ?;";
+        try (Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
+            preparedStatement.setString(1, learner.getFirstName());
+            preparedStatement.setString(2, learner.getLastName());
+            if (learner.getClassRoom() == null) {
+                preparedStatement.setNull(3, Types.NULL);
+            } else {
+                preparedStatement.setString(3, learner.getClassRoom().getClassCode());
+            }
+            preparedStatement.setLong(4, learner.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    /**
+     * Удаляет сущность по идентификатору.
+     *
+     * @param id идентификатор
+     */
     @Override
-    public void delete(Long id) {
+    public boolean deleteById(Long id) {
+        boolean result = false;
+        String DELETE_SQL = "DELETE FROM learners WHERE learner_id = ?;";
+        try (Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
+            preparedStatement.setLong(1, id);
 
+            result = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 
     /**

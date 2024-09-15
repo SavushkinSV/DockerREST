@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.util.PropertiesUtil;
@@ -64,16 +65,46 @@ public class LearnerRepositoryImplTest {
 
     @Test
     public void getByIdNegativeTest() {
-       Learner learner = learnerRepository.getById(15L);
+        Learner learner = learnerRepository.getById(15L);
 
         Assertions.assertNull(learner);
     }
 
     @Test
-    public void getAllTest(){
-        int expectedSize = 5;
+    public void getAllTest() {
+        int expectedSize = 6;
         int resultSize = learnerRepository.getAll().size();
 
         Assertions.assertEquals(expectedSize, resultSize);
+    }
+
+    @Test
+    public void deleteByIdTest() {
+        boolean expected = true;
+        int expectedSize = learnerRepository.getAll().size() - 1;
+
+        boolean result = learnerRepository.deleteById(6L);
+        int resultSize = learnerRepository.getAll().size();
+
+        Assertions.assertEquals(expected, result);
+        Assertions.assertEquals(expectedSize, resultSize);
+    }
+
+    @Test
+    public void updateTest() {
+        String expectedFirstName = "UpdateFirstName";
+        String expectedLastName = "UpdateLastName";
+        String expectedClassName = "2а";
+        Long expectedId = 6L;
+
+        Learner learnerUpdate = learnerRepository.getById(expectedId);
+        learnerUpdate.setFirstName(expectedFirstName);
+        learnerUpdate.setLastName(expectedLastName);
+        learnerRepository.update(learnerUpdate);
+
+        Learner learnerAfterUpdate = learnerRepository.getById(expectedId);
+
+        Assertions.assertEquals(expectedFirstName, learnerAfterUpdate.getFirstName());
+        Assertions.assertEquals(expectedLastName, learnerAfterUpdate.getLastName());
     }
 }
