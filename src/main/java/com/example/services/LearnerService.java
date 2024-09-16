@@ -10,4 +10,6 @@ public interface LearnerService {
     List<Learner> getAll();
 
     Learner add(Learner learner);
+
+    void delete(Long id);
 }

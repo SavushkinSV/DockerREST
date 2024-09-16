@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.util.PropertiesUtil;
@@ -105,5 +106,28 @@ public class LearnerRepositoryImplTest {
 
         Assertions.assertEquals(expectedFirstName, learnerAfterUpdate.getFirstName());
         Assertions.assertEquals(expectedLastName, learnerAfterUpdate.getLastName());
+    }
+
+    @Test
+    public void addTest() {
+        String expectedFirstName = "UpdateFirstName";
+        String expectedLastName = "UpdateLastName";
+        ClassRoom classRoom = new ClassRoom(2L, "1б");
+
+        Learner learner = new Learner(
+                null,
+                expectedFirstName,
+                expectedLastName,
+                classRoom,
+                null
+        );
+
+        learner = learnerRepository.add(learner);
+        Learner addLearner = learnerRepository.getById(learner.getId());
+
+        Assertions.assertEquals(expectedFirstName, addLearner.getFirstName());
+        Assertions.assertEquals(expectedLastName, addLearner.getLastName());
+        Assertions.assertEquals(learner.getClassRoom().getId(), addLearner.getClassRoom().getId());
+        Assertions.assertEquals(learner.getClassRoom().getCode(), addLearner.getClassRoom().getCode());
     }
 }

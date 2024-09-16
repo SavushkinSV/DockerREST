@@ -18,6 +18,7 @@ public class ClassRoom {
     public ClassRoom(Long id, String code) {
         this.id = id;
         this.code = code;
+        this.learnerList = null;
     }
 
     public Long getId() {
@@ -34,5 +35,14 @@ public class ClassRoom {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassRoom{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", learnerList=" + learnerList +
+                '}';
     }
 }

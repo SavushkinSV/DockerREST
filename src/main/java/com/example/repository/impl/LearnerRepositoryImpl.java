@@ -187,7 +187,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     private static Learner createLearner(ResultSet resultSet) throws SQLException {
         Long learnerId = resultSet.getLong("id");
-        ClassRoom classRoom = classRoomRepository.getById(learnerId);
+        ClassRoom classRoom = classRoomRepository.getById(resultSet.getLong("class_id"));
 
         return new Learner(
                 learnerId,

@@ -65,4 +65,15 @@ public class Learner {
     public void setRatingList(List<Rating> ratingtList) {
         this.ratingList = ratingtList;
     }
+
+    @Override
+    public String toString() {
+        return "Learner{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", classRoom=" + classRoom +
+                ", ratingList=" + ratingList +
+                '}';
+    }
 }

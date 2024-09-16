@@ -58,7 +58,7 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
 
     @Override
     public List<LearnerResponseDto> map(List<Learner> learnerList) {
-        List<LearnerResponseDto> learnerResponseDtoList = new ArrayList<>();
+        List<LearnerResponseDto> learnerResponseDtoList;
         learnerResponseDtoList = learnerList.stream().map(this::map).toList();
 
         return learnerResponseDtoList;

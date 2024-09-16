@@ -46,4 +46,10 @@ public class LearnerServiceImpl implements LearnerService {
 
         return learnerRepository.add(learner);
     }
+
+    @Override
+    public void delete(Long id) {
+
+        learnerRepository.deleteById(id);
+    }
 }

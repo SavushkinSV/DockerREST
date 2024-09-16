@@ -43,7 +43,7 @@ public class LearnerRequestDto {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", classRoom=" + classRoom +
+                ", classRoom=" + classRoom.toString() +
                 '}';
     }
 }
