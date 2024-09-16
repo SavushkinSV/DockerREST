@@ -125,7 +125,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
             if (learner.getClassRoom() == null) {
                 preparedStatement.setNull(3, Types.NULL);
             } else {
-                preparedStatement.setString(3, learner.getClassRoom().getCode());
+                preparedStatement.setLong(3, learner.getClassRoom().getId());
             }
             preparedStatement.setLong(4, learner.getId());
             preparedStatement.executeUpdate();
