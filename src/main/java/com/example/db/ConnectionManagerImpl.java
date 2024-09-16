@@ -32,38 +32,29 @@ public class ConnectionManagerImpl implements IConnectionManager {
      * Возвращает объект класса {@code ConnectionDB}.
      *
      * @return объект класса
+     * @throws ClassNotFoundException если класс не найден
      */
     public static IConnectionManager getInstance() {
         if (instance == null) {
             instance = new ConnectionManagerImpl();
-            loadDriver(PropertiesUtil.getProperty(DB_DRIVER_CLASS_NAME_KEY));
+            try {
+                String driverClass = PropertiesUtil.getProperty(DB_DRIVER_CLASS_NAME_KEY);
+                Class.forName(driverClass);
+                System.out.println("Database driver loaded.");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Database driver not loaded.");
+                throw new RuntimeException(e);
+            }
         }
 
         return instance;
     }
 
     /**
-     * Загружает драйвер класса.
-     *
-     * @param driverClass имя драйвера класса
-     * @throws ClassNotFoundException если драйвер класса не найден
-     */
-    private static void loadDriver(String driverClass) {
-        try {
-            Class.forName(driverClass);
-            System.out.println("Database driver loaded.");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Database driver not loaded.");
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Устанавливает соединение с базой данных.
      *
      * @return соединение с базой данных
-     * @throws ClassNotFoundException если класс не найден
-     * @throws SQLException           если произошла ошибка доступа к базе данных или URL-адрес имеет значение NULL
+     * @throws SQLException если произошла ошибка доступа к базе данных или URL-адрес имеет значение NULL
      */
     public Connection getConnection() {
         String url = PropertiesUtil.getProperty(DB_CONTAINER_URL_KEY) +
