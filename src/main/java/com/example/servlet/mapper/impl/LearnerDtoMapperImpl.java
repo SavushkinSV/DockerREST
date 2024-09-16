@@ -1,13 +1,14 @@
-package com.example.servlet.mapper;
+package com.example.servlet.mapper.impl;
 
 import com.example.model.Learner;
 import com.example.servlet.dto.LearnerRequestDto;
 import com.example.servlet.dto.LearnerResponseDto;
+import com.example.servlet.mapper.LearnerDtoMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LearnerDtoMapperImpl implements LearnerDtoMapper{
+public class LearnerDtoMapperImpl implements LearnerDtoMapper {
     private static LearnerDtoMapper instance;
 
     private LearnerDtoMapperImpl() {
@@ -50,7 +51,7 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper{
                 learner.getId(),
                 learner.getFirstName(),
                 learner.getLastName(),
-                null,
+                learner.getClassRoom(),
                 null
         );
     }

@@ -2,8 +2,10 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.model.Rating;
+import com.example.repository.ClassRoomRepository;
 import com.example.repository.LearnerRepository;
 
 import java.sql.*;
@@ -13,6 +15,7 @@ import java.util.List;
 public class LearnerRepositoryImpl implements LearnerRepository {
     private static LearnerRepositoryImpl instance;
     private static final IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
+    private static final ClassRoomRepository classRoomRepository = ClassRoomRepositoryImpl.getInstance();
 
     private LearnerRepositoryImpl() {
     }
@@ -84,6 +87,11 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
     public Learner getById(Long id) {
         String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
@@ -117,7 +125,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
             if (learner.getClassRoom() == null) {
                 preparedStatement.setNull(3, Types.NULL);
             } else {
-                preparedStatement.setString(3, learner.getClassRoom().getClassCode());
+                preparedStatement.setString(3, learner.getClassRoom().getCode());
             }
             preparedStatement.setLong(4, learner.getId());
             preparedStatement.executeUpdate();
@@ -179,12 +187,13 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     private static Learner createLearner(ResultSet resultSet) throws SQLException {
         Long learnerId = resultSet.getLong("id");
+        ClassRoom classRoom = classRoomRepository.getById(learnerId);
 
         return new Learner(
                 learnerId,
                 resultSet.getString("first_name"),
                 resultSet.getString("last_name"),
-                null,
+                classRoom,
                 null
         );
     }

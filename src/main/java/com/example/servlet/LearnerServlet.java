@@ -6,7 +6,7 @@ import com.example.services.impl.LearnerServiceImpl;
 import com.example.servlet.dto.LearnerRequestDto;
 import com.example.servlet.dto.LearnerResponseDto;
 import com.example.servlet.mapper.LearnerDtoMapper;
-import com.example.servlet.mapper.LearnerDtoMapperImpl;
+import com.example.servlet.mapper.impl.LearnerDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
@@ -57,6 +57,7 @@ public class LearnerServlet extends HttpServlet {
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             respString = "Bad request.";
+            throw new IOException(e);
         }
         PrintWriter printWriter = resp.getWriter();
         printWriter.write(respString);
@@ -71,9 +72,8 @@ public class LearnerServlet extends HttpServlet {
         BufferedReader reader = req.getReader();
         LearnerRequestDto learnerRequestDto = objectMapper.readValue(reader, LearnerRequestDto.class);
 
-        Learner addLearner = service.add(mapper.map(learnerRequestDto));
-//        respString = learnerRequestDto.toString();
-
+//        Learner addLearner = service.add(mapper.map(learnerRequestDto));
+        respString = learnerRequestDto.toString();
 
         // Установка заголовка и типа содержимого
         resp.setContentType("application/json");

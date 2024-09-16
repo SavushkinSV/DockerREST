@@ -9,15 +9,15 @@ import java.util.List;
  */
 public class ClassRoom {
     private Long id;
-    private String classCode;
+    private String code;
     private List<Learner> learnerList;
 
     public ClassRoom() {
     }
 
-    public ClassRoom(Long id, String classCode) {
+    public ClassRoom(Long id, String code) {
         this.id = id;
-        this.classCode = classCode;
+        this.code = code;
     }
 
     public Long getId() {
@@ -28,11 +28,11 @@ public class ClassRoom {
         this.id = id;
     }
 
-    public String getClassCode() {
-        return classCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setClassCode(String classCode) {
-        this.classCode = classCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 }
