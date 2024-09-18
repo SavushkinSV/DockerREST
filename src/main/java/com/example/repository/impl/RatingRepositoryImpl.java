@@ -2,7 +2,6 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
-import com.example.model.Learner;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 
@@ -53,7 +52,7 @@ public class RatingRepositoryImpl implements RatingRepository {
      */
     @Override
     public Rating getById(Long id) {
-        String FIND_BY_ID_SQL = "SELECT id, data, value, name FROM ratings WHERE id=?;";
+        String FIND_BY_ID_SQL = "SELECT id, data, value, subject_name FROM ratings WHERE id=?;";
         Rating rating = null;
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);
@@ -76,7 +75,7 @@ public class RatingRepositoryImpl implements RatingRepository {
      */
     @Override
     public List<Rating> getAll() {
-        String FIND_ALL_SQL = "SELECT id, data, value, name FROM ratings;";
+        String FIND_ALL_SQL = "SELECT id, data, value, subject_name FROM ratings;";
         List<Rating> ratingList = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
@@ -105,7 +104,7 @@ public class RatingRepositoryImpl implements RatingRepository {
                 ratingId,
                 resultSet.getString("data"),
                 resultSet.getInt("value"),
-                resultSet.getString("name")
+                resultSet.getString("subject_name")
         );
     }
 }
