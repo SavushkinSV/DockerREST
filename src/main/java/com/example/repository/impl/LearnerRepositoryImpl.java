@@ -7,6 +7,7 @@ import com.example.model.Learner;
 import com.example.model.Rating;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.LearnerRepository;
+import com.example.repository.RatingRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     private static LearnerRepositoryImpl instance;
     private static final IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private static final ClassRoomRepository classRoomRepository = ClassRoomRepositoryImpl.getInstance();
+    private static final RatingRepository ratingRepository = RatingRepositoryImpl.getInstance();
 
     private LearnerRepositoryImpl() {
     }
@@ -91,6 +93,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        if (leaner != null) {
+            leaner.setRatingList(saveRatingList(leaner.getId()));
+        }
 
         return leaner;
     }
@@ -121,8 +126,10 @@ public class LearnerRepositoryImpl implements LearnerRepository {
 
     /**
      * Удаляет сущность по идентификатору.
+     * Возвращает {@code true} если сущность удалена. Возвращает {@code false} если сущность не найдена.
      *
      * @param id идентификатор
+     * @return {@code true} если сущность удалена
      */
     @Override
     public boolean deleteById(Long id) {
@@ -159,6 +166,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        if (!learnerList.isEmpty()) {
+            learnerList.stream().forEach(x -> x.setRatingList(saveRatingList(x.getId())));
+        }
 
         return learnerList;
     }
@@ -189,14 +199,15 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      * @param id идентификатор
      */
     private List<Rating> saveRatingList(Long id) {
-        List<Rating> ratingList = null;
-        String FIND_RATINGS_BY_ID_SQL = "SELECT r.id, data, value, name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
+        List<Rating> ratingList = new ArrayList<>();
+        String FIND_RATINGS_BY_ID_SQL = "SELECT r.id, data, value, subject_name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_RATINGS_BY_ID_SQL);
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-
+            while (resultSet.next()) {
+                Long ratingId = resultSet.getLong("id");
+                ratingList.add(ratingRepository.getById(ratingId));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

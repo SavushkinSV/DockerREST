@@ -5,10 +5,7 @@ import com.example.db.IConnectionManager;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +24,39 @@ public class RatingRepositoryImpl implements RatingRepository {
         return instance;
     }
 
+    /**
+     * Добавляет в базу данных сущность.
+     *
+     * @param rating сущность
+     * @return сущность
+     */
     @Override
-    public Rating add(Rating entity) {
-        return null;
+    public Rating add(Rating rating) {
+        String ADD_SQL = "INSERT INTO ratings (data, value, subject_name) VALUES (?, ?, ?);";
+
+
+        try (Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setDate(1, Date.valueOf(rating.getDate()));
+            preparedStatement.setInt(2,rating.getValue());
+            preparedStatement.setString(3,rating.getSubjectName());
+            preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                rating = new Rating(
+                        resultSet.getLong("id"),
+                        rating.getDate(),
+                        rating.getValue(),
+                        rating.getSubjectName()
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return rating;
     }
 
     @Override
@@ -37,11 +64,26 @@ public class RatingRepositoryImpl implements RatingRepository {
 
     }
 
+    /**
+     * Удаляет сущность по идентификатору.
+     * Возвращает {@code true} если сущность удалена. Возвращает {@code false} если сущность не найдена.
+     *
+     * @param id идентификатор
+     * @return {@code true} если сущность удалена
+     */
     @Override
     public boolean deleteById(Long id) {
+        boolean result = false;
+        String DELETE_SQL = "DELETE FROM ratings WHERE id = ?;";
+        try (Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
+            preparedStatement.setLong(1, id);
+            result = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
-
-        return false;
+        return result;
     }
 
     /**

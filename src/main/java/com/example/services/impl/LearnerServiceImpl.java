@@ -50,7 +50,7 @@ public class LearnerServiceImpl implements LearnerService {
     }
 
     @Override
-    public void delete(Long id) {
-        learnerRepository.deleteById(id);
+    public boolean delete(Long id) {
+        return learnerRepository.deleteById(id);
     }
 }

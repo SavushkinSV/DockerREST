@@ -3,7 +3,6 @@ package com.example.services.impl;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 import com.example.repository.impl.RatingRepositoryImpl;
-import com.example.services.IService;
 import com.example.services.RatingService;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public void delete(Long id) {
-
+    public boolean delete(Long id) {
+        return ratingRepository.deleteById(id);
     }
 }

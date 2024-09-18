@@ -55,4 +55,23 @@ public class RatingServlet extends HttpServlet {
         printWriter.write(respString);
         printWriter.flush();
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String respString = "";
+        try {
+            String[] reqString = req.getPathInfo().split("/");
+            if (reqString.length == 2) {
+                Long id = Long.parseLong(reqString[1]);
+                service.delete(id);
+                resp.setStatus(HttpServletResponse.SC_OK);
+            }
+        } catch (Exception e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            respString = "Bad request.";
+        }
+        PrintWriter printWriter = resp.getWriter();
+        printWriter.write(respString);
+        printWriter.flush();
+    }
 }

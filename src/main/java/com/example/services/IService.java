@@ -9,5 +9,5 @@ public interface IService<T> {
 
     T add(T entity);
 
-    void delete(Long id);
+    boolean delete(Long id);
 }

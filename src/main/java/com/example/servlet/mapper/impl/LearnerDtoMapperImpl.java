@@ -51,7 +51,7 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
                 learner.getFirstName(),
                 learner.getLastName(),
                 learner.getClassRoom(),
-                null
+                learner.getRatingList()
         );
     }
 
