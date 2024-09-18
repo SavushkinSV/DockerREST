@@ -44,8 +44,8 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public Rating add(Rating entity) {
-        return null;
+    public Rating add(Rating rating) {
+        return ratingRepository.add(rating);
     }
 
     @Override

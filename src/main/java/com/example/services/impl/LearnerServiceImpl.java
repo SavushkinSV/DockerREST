@@ -44,6 +44,12 @@ public class LearnerServiceImpl implements LearnerService {
         return learnerRepository.getAll();
     }
 
+    /**
+     * Добавляет сущность.
+     *
+     * @param learner сущность
+     * @return сущность
+     */
     @Override
     public Learner add(Learner learner) {
         return learnerRepository.add(learner);
