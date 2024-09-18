@@ -12,18 +12,16 @@ public class Rating {
     private String date;
     private Integer value;
     private String subjectName;
-    private Long leanerId;
     private List<Learner> learnerList;
 
     public Rating() {
     }
 
-    public Rating(Long id, String date, Integer value, String subjectName, Long leanerId) {
+    public Rating(Long id, String date, Integer value, String subjectName) {
         this.id = id;
         this.date = date;
         this.value = value;
         this.subjectName = subjectName;
-        this.leanerId = leanerId;
     }
 
     public Long getId() {
@@ -56,14 +54,6 @@ public class Rating {
 
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
-    }
-
-    public Long getLeanerId() {
-        return leanerId;
-    }
-
-    public void setLeanerId(Long leanerId) {
-        this.leanerId = leanerId;
     }
 
     public List<Learner> getLearnerList() {

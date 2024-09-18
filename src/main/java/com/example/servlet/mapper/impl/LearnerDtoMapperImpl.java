@@ -5,7 +5,6 @@ import com.example.servlet.dto.LearnerRequestDto;
 import com.example.servlet.dto.LearnerResponseDto;
 import com.example.servlet.mapper.LearnerDtoMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LearnerDtoMapperImpl implements LearnerDtoMapper {
@@ -23,24 +22,24 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
     }
 
     /**
-     * Принимает запрос.
+     * Преобразует DTO в сущность.
      *
-     * @param requestDto
-     * @return
+     * @param dto объект передачи данных
+     * @return сущность
      */
     @Override
-    public Learner map(LearnerRequestDto requestDto) {
+    public Learner map(LearnerRequestDto dto) {
         return new Learner(
                 null,
-                requestDto.getFirstName(),
-                requestDto.getLastName(),
-                requestDto.getClassRoom(),
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getClassRoom(),
                 null
         );
     }
 
     /**
-     *  Направляет ответ.
+     * Преобразует сущность в DTO.
      *
      * @param learner сущность
      * @return DTO
@@ -56,11 +55,17 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
         );
     }
 
+    /**
+     * Преобразует коллекцию сущностей в DTO.
+     *
+     * @param learnerList коллекция сущностей
+     * @return коллекция DTO
+     */
     @Override
     public List<LearnerResponseDto> map(List<Learner> learnerList) {
-        List<LearnerResponseDto> learnerResponseDtoList;
-        learnerResponseDtoList = learnerList.stream().map(this::map).toList();
+        List<LearnerResponseDto> responseDtos;
+        responseDtos = learnerList.stream().map(this::map).toList();
 
-        return learnerResponseDtoList;
+        return responseDtos;
     }
 }

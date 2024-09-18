@@ -72,25 +72,10 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     }
 
     /**
-     * Сохраняет список оценок.
+     * Возвращает сущность по идентификатору.
      *
-     * @param learner объект ученик
-     */
-    private void saveRatingList(Learner learner) {
-        if (learner.getRatingList() != null && !learner.getRatingList().isEmpty()) {
-            List<Long> ratingList = new ArrayList<>(
-                    learner.getRatingList()
-                            .stream()
-                            .map(Rating::getId)
-                            .toList()
-            );
-        }
-    }
-
-    /**
-     *
-     * @param id
-     * @return
+     * @param id идентификатор
+     * @return сущность
      */
     @Override
     public Learner getById(Long id) {
@@ -196,5 +181,27 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 classRoom,
                 null
         );
+    }
+
+    /**
+     * Сохраняет список оценок сущности Learner по идентификатору.
+     *
+     * @param id идентификатор
+     */
+    private List<Rating> saveRatingList(Long id) {
+        List<Rating> ratingList = null;
+        String FIND_RATINGS_BY_ID_SQL = "SELECT r.id, data, value, name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
+        try (Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_RATINGS_BY_ID_SQL);
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return ratingList;
     }
 }

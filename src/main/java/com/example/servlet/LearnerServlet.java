@@ -18,14 +18,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "SimpleServlet", value = "/learner/*")
+@WebServlet(name = "LearnerServlet", value = "/learner/*")
 public class LearnerServlet extends HttpServlet {
     private final LearnerService service = LearnerServiceImpl.getInstance();
     private final LearnerDtoMapper mapper = LearnerDtoMapperImpl.getInstance();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String respString = "";
         try {
             String[] reqString = req.getPathInfo().split("/");
@@ -97,6 +97,5 @@ public class LearnerServlet extends HttpServlet {
         PrintWriter printWriter = resp.getWriter();
         printWriter.write(respString);
         printWriter.flush();
-
     }
 }

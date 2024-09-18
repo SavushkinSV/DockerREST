@@ -31,25 +31,26 @@ public class LearnerServiceImpl implements LearnerService {
      */
     @Override
     public Learner getById(Long id) {
-
         return learnerRepository.getById(id);
     }
 
+    /**
+     * Возвращает все сущности.
+     *
+     * @return коллекция сущностей
+     */
     @Override
     public List<Learner> getAll() {
-
         return learnerRepository.getAll();
     }
 
     @Override
     public Learner add(Learner learner) {
-
         return learnerRepository.add(learner);
     }
 
     @Override
     public void delete(Long id) {
-
         learnerRepository.deleteById(id);
     }
 }
