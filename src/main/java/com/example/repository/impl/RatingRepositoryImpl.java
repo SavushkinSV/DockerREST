@@ -39,8 +39,8 @@ public class RatingRepositoryImpl implements RatingRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setDate(1, Date.valueOf(rating.getDate()));
-            preparedStatement.setInt(2,rating.getValue());
-            preparedStatement.setString(3,rating.getSubjectName());
+            preparedStatement.setInt(2, rating.getValue());
+            preparedStatement.setString(3, rating.getSubjectName());
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -59,9 +59,24 @@ public class RatingRepositoryImpl implements RatingRepository {
         return rating;
     }
 
+    /**
+     * Обновляет сущность.
+     *
+     * @param rating сущность
+     */
     @Override
-    public void update(Rating entity) {
-
+    public void update(Rating rating) {
+        String UPDATE_SQL = "UPDATE ratings SET data=?, value=?, subject_name=? WHERE id=?;";
+        try (Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
+            preparedStatement.setDate(1, Date.valueOf(rating.getDate()));
+            preparedStatement.setInt(2, rating.getValue());
+            preparedStatement.setString(3, rating.getSubjectName());
+            preparedStatement.setLong(4, rating.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

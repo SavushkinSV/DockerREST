@@ -52,4 +52,9 @@ public class RatingServiceImpl implements RatingService {
     public boolean delete(Long id) {
         return ratingRepository.deleteById(id);
     }
+
+    @Override
+    public void update(Rating rating) {
+        ratingRepository.update(rating);
+    }
 }

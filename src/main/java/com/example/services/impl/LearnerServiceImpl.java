@@ -55,8 +55,24 @@ public class LearnerServiceImpl implements LearnerService {
         return learnerRepository.add(learner);
     }
 
+    /**
+     * Добавляет сущность по идентификатору.
+     *
+     * @param id идентификатор
+     * @return {@code true} если сущность удалена
+     */
     @Override
     public boolean delete(Long id) {
         return learnerRepository.deleteById(id);
+    }
+
+    /**
+     * Обновляет данные сущности.
+     *
+     * @param learner сущность
+     */
+    @Override
+    public void update(Learner learner) {
+        learnerRepository.update(learner);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.repository;
 
-import com.example.model.Learner;
 import com.example.model.Rating;
 import com.example.repository.impl.RatingRepositoryImpl;
 import com.example.util.PropertiesUtil;
@@ -120,6 +119,26 @@ public class RatingRepositoryImplTest {
         Assertions.assertEquals(expectedDate, addRating.getDate());
         Assertions.assertEquals(expectedValue, addRating.getValue());
         Assertions.assertEquals(expectedSubjectName, addRating.getSubjectName());
+    }
+
+    @Test
+    public void updateTest() {
+        String expectedDate = "2001-12-01";
+        Integer expectedValue = 1;
+        String expectedSubjectName = "Test";
+        Long expectedId = 2L;
+
+        Rating ratingUpdate = ratingRepository.getById(expectedId);
+        ratingUpdate.setDate(expectedDate);
+        ratingUpdate.setValue(expectedValue);
+        ratingUpdate.setSubjectName(expectedSubjectName);
+        ratingRepository.update(ratingUpdate);
+
+        Rating ratingAfterUpdate = ratingRepository.getById(expectedId);
+
+        Assertions.assertEquals(expectedDate, ratingAfterUpdate.getDate());
+        Assertions.assertEquals(expectedValue, ratingAfterUpdate.getValue());
+        Assertions.assertEquals(expectedSubjectName, ratingAfterUpdate.getSubjectName());
     }
 
 

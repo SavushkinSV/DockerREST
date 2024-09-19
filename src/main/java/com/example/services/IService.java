@@ -10,4 +10,6 @@ public interface IService<T> {
     T add(T entity);
 
     boolean delete(Long id);
+
+    void update(T entity);
 }
