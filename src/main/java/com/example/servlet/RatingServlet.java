@@ -98,6 +98,28 @@ public class RatingServlet extends HttpServlet {
         printWriter.flush();
     }
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String respString = "";
+        int statusCode = HttpServletResponse.SC_NOT_FOUND;
+
+        RatingRequestDto ratingRequestDto = objectMapper.readValue(req.getReader(), RatingRequestDto.class);
+        Rating rating = service.getById(ratingRequestDto.getId());
+        if (rating != null) {
+            service.update(mapper.map(ratingRequestDto));
+            statusCode = HttpServletResponse.SC_OK;
+        } else {
+            respString = "Rating not found";
+        }
+
+        setJsonHeader(resp, statusCode);
+        PrintWriter printWriter = resp.getWriter();
+        printWriter.write(respString);
+        printWriter.flush();
+    }
+
+
+
     /**
      * Устанавливает заголовок и тип содержимого.
      */

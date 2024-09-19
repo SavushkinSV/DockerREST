@@ -30,7 +30,7 @@ public class RatingDtoMapperImpl implements RatingDtoMapper {
     @Override
     public Rating map(RatingRequestDto dto) {
         return new Rating(
-                null,
+                dto.getId(),
                 dto.getDate(),
                 dto.getValue(),
                 dto.getSubjectName()
