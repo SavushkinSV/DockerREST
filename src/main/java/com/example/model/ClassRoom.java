@@ -37,12 +37,4 @@ public class ClassRoom {
         this.code = code;
     }
 
-    @Override
-    public String toString() {
-        return "ClassRoom{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", learnerList=" + learnerList +
-                '}';
-    }
 }

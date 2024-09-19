@@ -16,6 +16,11 @@ public class RatingRepositoryImpl implements RatingRepository {
     private RatingRepositoryImpl() {
     }
 
+    /**
+     * Возвращает единственный экземпляр объекта класса {@code RatingRepositoryImpl}.
+     *
+     * @return экземпляр класса
+     */
     public static RatingRepository getInstance() {
         if (instance == null) {
             instance = new RatingRepositoryImpl();

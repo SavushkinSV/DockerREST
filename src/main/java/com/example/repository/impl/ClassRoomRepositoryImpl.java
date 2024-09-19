@@ -32,7 +32,7 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
     }
 
     @Override
-    public void update(ClassRoom entity) {
+    public void update(ClassRoom entity) { // Добавить реализацию метода
 
     }
 
@@ -46,8 +46,9 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
         String FIND_BY_ID_SQL = "SELECT id, code FROM class_rooms WHERE id=?;";
         ClassRoom classRoom = null;
 
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);) {
+
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

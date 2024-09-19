@@ -1,6 +1,5 @@
-package com.example.repositoty.impl;
+package com.example.service.impl;
 
-import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
@@ -11,16 +10,13 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
 
-public class LearnerServiceImplTest {
-
+class LearnerServiceImplTest {
     private static LearnerService service;
     private static LearnerRepository repository;
-    private static ClassRoom classRoom;
     private static LearnerRepositoryImpl oldInstance;
 
     @BeforeAll
     static void beforeAll() {
-        classRoom = new ClassRoom(1L, "1а");
 //        Создаем mock класса LearnerRepository
         repository = Mockito.mock(LearnerRepositoryImpl.class);
         try {
@@ -51,13 +47,13 @@ public class LearnerServiceImplTest {
     }
 
     @Test
-    public void getByIdTest() {
+    void getByIdTest() {
         Long expectedId = 1L;
         Learner mockLearner = new Learner(
                 expectedId,
                 "Test",
                 "Test",
-                classRoom,
+                null,
                 null
         );
         Mockito.doReturn(mockLearner).when(repository).getById(Mockito.anyLong());
@@ -68,7 +64,7 @@ public class LearnerServiceImplTest {
     }
 
     @Test
-    public void getAllTest() {
+    void getAllTest() {
         service.getAll();
 
         Mockito.verify(repository).getAll();
@@ -81,7 +77,7 @@ public class LearnerServiceImplTest {
                 expectedId,
                 "Test",
                 "Test",
-                classRoom,
+                null,
                 null
         );
         Mockito.doReturn(mockLearner).when(repository).add(Mockito.any(Learner.class));
@@ -92,7 +88,7 @@ public class LearnerServiceImplTest {
     }
 
     @Test
-    public void deleteByIdTest() {
+    void deleteByIdTest() {
         Mockito.doReturn(true).when(repository).deleteById(Mockito.any(Long.class));
         boolean result = service.delete(5L);
 
@@ -106,7 +102,7 @@ public class LearnerServiceImplTest {
                 expectedId,
                 "Test",
                 "Test",
-                classRoom,
+                null,
                 null
         );
 
@@ -114,7 +110,6 @@ public class LearnerServiceImplTest {
 
         Mockito.verify(repository).update(mockLearner);
     }
-
 
 
 }

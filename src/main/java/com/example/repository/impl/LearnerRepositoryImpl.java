@@ -44,8 +44,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     @Override
     public Learner add(Learner learner) {
         String ADD_SQL = "INSERT INTO learners (first_name, last_name, class_id) VALUES (?, ?, ?);";
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);) {
+
 
             preparedStatement.setString(1, learner.getFirstName());
             preparedStatement.setString(2, learner.getLastName());
@@ -81,10 +82,11 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     @Override
     public Learner getById(Long id) {
-        String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
+        final String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
         Learner leaner = null;
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);) {
+
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -108,8 +110,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     @Override
     public void update(Learner learner) {
         String UPDATE_SQL = "UPDATE learners SET first_name=?, last_name=?, class_id=? WHERE id=?;";
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);) {
+
             preparedStatement.setString(1, learner.getFirstName());
             preparedStatement.setString(2, learner.getLastName());
             if (learner.getClassRoom() == null) {
@@ -135,8 +138,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     public boolean deleteById(Long id) {
         boolean result = false;
         String DELETE_SQL = "DELETE FROM learners WHERE id = ?;";
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);) {
+
             preparedStatement.setLong(1, id);
 
             result = preparedStatement.executeUpdate() > 0;
@@ -156,8 +160,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     public List<Learner> getAll() {
         String FIND_ALL_SQL = "SELECT id, first_name, last_name, class_id FROM learners;";
         List<Learner> learnerList = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);) {
+
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -200,9 +205,10 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     private List<Rating> saveRatingList(Long id) {
         List<Rating> ratingList = new ArrayList<>();
-        String FIND_RATINGS_BY_ID_SQL = "SELECT r.id, data, value, subject_name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_RATINGS_BY_ID_SQL);
+        final String FIND_RATINGS_BY_ID_SQL = "SELECT r.id, data, value, subject_name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_RATINGS_BY_ID_SQL);) {
+
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
