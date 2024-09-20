@@ -30,7 +30,7 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
     @Override
     public Learner map(LearnerRequestDto dto) {
         return new Learner(
-                null,
+                dto.getId(),
                 dto.getFirstName(),
                 dto.getLastName(),
                 dto.getClassRoom(),

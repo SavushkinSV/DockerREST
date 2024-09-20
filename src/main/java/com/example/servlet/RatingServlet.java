@@ -24,7 +24,11 @@ import java.util.List;
 public class RatingServlet extends HttpServlet {
     private static final RatingService service = RatingServiceImpl.getInstance();
     private static final RatingDtoMapper mapper = RatingDtoMapperImpl.getInstance();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public RatingServlet(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

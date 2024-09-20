@@ -8,7 +8,6 @@ import com.example.servlet.dto.LearnerResponseDto;
 import com.example.servlet.mapper.LearnerDtoMapper;
 import com.example.servlet.mapper.impl.LearnerDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,11 +21,16 @@ import java.util.List;
 public class LearnerServlet extends HttpServlet {
     private final LearnerService service = LearnerServiceImpl.getInstance();
     private final LearnerDtoMapper mapper = LearnerDtoMapperImpl.getInstance();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public LearnerServlet() {
+        this.objectMapper = new ObjectMapper();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String respString = "";
+        int statusCode = HttpServletResponse.SC_BAD_REQUEST;
         try {
             String[] reqString = req.getPathInfo().split("/");
             if (reqString.length == 2) {
@@ -35,24 +39,24 @@ public class LearnerServlet extends HttpServlet {
                 if (learner != null) {
                     LearnerResponseDto responseDto = mapper.map(learner);
                     // return our DTO
-                    resp.setStatus(HttpServletResponse.SC_OK);
+                    statusCode = HttpServletResponse.SC_OK;
                     respString = objectMapper.writeValueAsString(responseDto);
                 } else {
-                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    statusCode = HttpServletResponse.SC_NOT_FOUND;
                     respString = "Learner not found";
                 }
             } else if (reqString.length == 0) {
                 List<Learner> learnerList = service.getAll();
                 // return our DTO
                 List<LearnerResponseDto> responseDtoList = mapper.map(learnerList);
-                resp.setStatus(HttpServletResponse.SC_OK);
+                statusCode = HttpServletResponse.SC_OK;
                 respString = objectMapper.writeValueAsString(responseDtoList);
             }
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            statusCode = HttpServletResponse.SC_BAD_REQUEST;
             respString = "Bad request.";
-            throw new IOException(e);
         }
+        setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
         printWriter.write(respString);
         printWriter.flush();
@@ -61,6 +65,7 @@ public class LearnerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String respString = "";
+        int statusCode = HttpServletResponse.SC_BAD_REQUEST;
 
         // Чтение тела запроса и преобразование JSON в DTO
         LearnerRequestDto learnerRequestDto = objectMapper.readValue(req.getReader(), LearnerRequestDto.class);
@@ -69,11 +74,7 @@ public class LearnerServlet extends HttpServlet {
         LearnerResponseDto learnerResponseDto = mapper.map(addLearner);
         respString = objectMapper.writeValueAsString(learnerResponseDto);
 
-        // Установка заголовка и типа содержимого
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        resp.setStatus(HttpServletResponse.SC_CREATED);
-
+        setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
         printWriter.write(respString);
         printWriter.flush();
@@ -82,20 +83,32 @@ public class LearnerServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String respString = "";
+        int statusCode = HttpServletResponse.SC_BAD_REQUEST;
         try {
             String[] reqString = req.getPathInfo().split("/");
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
-                service.delete(id);
-                resp.setStatus(HttpServletResponse.SC_OK);
+                boolean status = service.delete(id);
+                if (status)
+                    statusCode = HttpServletResponse.SC_OK;
+                else
+                    statusCode = HttpServletResponse.SC_NOT_FOUND;
             }
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             respString = "Bad request.";
-//            throw new IOException(e);
         }
+        setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
         printWriter.write(respString);
         printWriter.flush();
+    }
+
+    /**
+     * Устанавливает заголовок и тип содержимого.
+     */
+    private static void setJsonHeader(HttpServletResponse resp, int statusCode) {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.setStatus(statusCode);
     }
 }
