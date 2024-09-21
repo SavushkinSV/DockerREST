@@ -2,6 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.exeption.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 
@@ -13,7 +14,6 @@ import java.util.List;
 
 public class ClassRoomRepositoryImpl implements ClassRoomRepository {
     private static ClassRoomRepositoryImpl instance;
-    private static final IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
 
     private ClassRoomRepositoryImpl() {
     }
@@ -32,7 +32,7 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
     }
 
     @Override
-    public void update(ClassRoom entity) {
+    public void update(ClassRoom entity) { // Добавить реализацию метода
 
     }
 
@@ -43,18 +43,20 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
 
     @Override
     public ClassRoom getById(Long id) {
-        String FIND_BY_ID_SQL = "SELECT id, code FROM class_rooms WHERE id=?;";
+        String findByIdSql = "SELECT id, code FROM class_rooms WHERE id=?;";
         ClassRoom classRoom = null;
+        IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
 
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(findByIdSql);) {
+
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 classRoom = createClassRoom(resultSet);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return classRoom;

@@ -66,14 +66,4 @@ public class Learner {
         this.ratingList = ratingtList;
     }
 
-    @Override
-    public String toString() {
-        return "Learner{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", classRoom=" + classRoom +
-                ", ratingList=" + ratingList +
-                '}';
-    }
 }

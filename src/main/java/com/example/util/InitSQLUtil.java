@@ -31,7 +31,6 @@ public class InitSQLUtil {
         try (Connection connection = connectionManager.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(schemeSQL);
-            System.out.println("Схема базы данных инициализирована");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS ratings
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data DATE NOT NULL,
     value INT NOT NULL,
-    name VARCHAR (255) NOT NULL REFERENCES subjects (name)
+    subject_name VARCHAR (255) NOT NULL REFERENCES subjects (name)
 );
 
 CREATE TABLE IF NOT EXISTS learner_ratings
@@ -51,7 +51,8 @@ VALUES ('Русский язык'),
        ('Литература'),
        ('Математика'),
        ('Чтение'),
-       ('Изобразительное искусство');
+       ('Изобразительное искусство'),
+       ('Test');
 
 INSERT INTO learners (first_name, last_name, class_id)
 VALUES ('Ксения', 'Урусова', 1),
@@ -61,7 +62,7 @@ VALUES ('Ксения', 'Урусова', 1),
        ('Екатерина', 'Назарова', 3),
        ('Test', 'Test', 3);
 
-INSERT INTO ratings (data, value, name)
+INSERT INTO ratings (data, value, subject_name)
 VALUES ('01-09-2024', 5, 'Русский язык'),
        ('01-09-2024', 4, 'Математика'),
        ('01-09-2024', 5, 'Чтение'),
@@ -69,7 +70,8 @@ VALUES ('01-09-2024', 5, 'Русский язык'),
        ('02-09-2024', 5, 'Чтение'),
        ('02-09-2024', 5, 'Чтение'),
        ('02-09-2024', 4, 'Изобразительное искусство'),
-       ('02-09-2024', 3, 'Русский язык');
+       ('02-09-2024', 3, 'Русский язык'),
+       ('01-01-2000', 1, 'Test');
 
 INSERT INTO learner_ratings (learner_id, rating_id)
 VALUES (1, 1),
@@ -80,4 +82,3 @@ VALUES (1, 1),
        (4, 6),
        (4, 7),
        (2, 8);
-

@@ -15,9 +15,6 @@ public class LearnerResponseDto {
     private ClassRoom classRoom;
     private List<Rating> ratingList;
 
-    public LearnerResponseDto() {
-    }
-
     public LearnerResponseDto(Long id, String firstName, String lastName, ClassRoom classRoom, List<Rating> ratingList) {
         this.id = id;
         this.firstName = firstName;

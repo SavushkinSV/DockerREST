@@ -3,7 +3,7 @@ package com.example.servlet.dto;
 import com.example.model.ClassRoom;
 
 /**
- * Запрос
+ * Запрос от клиента.
  */
 public class LearnerRequestDto {
     private Long id;
@@ -37,13 +37,4 @@ public class LearnerRequestDto {
         return classRoom;
     }
 
-    @Override
-    public String toString() {
-        return "LearnerRequestDto{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", classRoom=" + classRoom.toString() +
-                '}';
-    }
 }

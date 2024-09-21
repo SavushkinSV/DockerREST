@@ -130,4 +130,76 @@ public class LearnerRepositoryImplTest {
         Assertions.assertEquals(learner.getClassRoom().getId(), addLearner.getClassRoom().getId());
         Assertions.assertEquals(learner.getClassRoom().getCode(), addLearner.getClassRoom().getCode());
     }
+
+    @Test
+    public void addTestWithClassRoomNull() {
+        String expectedFirstName = "UpdateFirstName";
+        String expectedLastName = "UpdateLastName";
+
+        Learner learner = new Learner(
+                null,
+                expectedFirstName,
+                expectedLastName,
+                null,
+                null
+        );
+
+        learner = learnerRepository.add(learner);
+        Learner addLearner = learnerRepository.getById(learner.getId());
+
+        Assertions.assertEquals(expectedFirstName, addLearner.getFirstName());
+        Assertions.assertEquals(expectedLastName, addLearner.getLastName());
+        Assertions.assertNull(addLearner.getClassRoom());
+    }
+
+    @Test
+    public void updateWithClassRoomTest() {
+        String expectedFirstName = "UpdateFirstName";
+        String expectedLastName = "UpdateLastName";
+        Long expectedId = 6L;
+
+        Learner learnerUpdate = learnerRepository.getById(expectedId);
+        learnerUpdate.setFirstName(expectedFirstName);
+        learnerUpdate.setLastName(expectedLastName);
+        learnerUpdate.setClassRoom(null);
+        learnerRepository.update(learnerUpdate);
+
+        Learner learnerAfterUpdate = learnerRepository.getById(expectedId);
+
+        Assertions.assertEquals(expectedFirstName, learnerAfterUpdate.getFirstName());
+        Assertions.assertEquals(expectedLastName, learnerAfterUpdate.getLastName());
+        Assertions.assertNull(learnerAfterUpdate.getClassRoom());
+    }
+
+    @Test
+    public void addWithExceptionTest() {
+        String expectedFirstName = "UpdateFirstName";
+        String expectedLastName = "UpdateLastName";
+        ClassRoom classRoom = new ClassRoom(19L, "1u");
+
+        Learner learner = new Learner(
+                null,
+                expectedFirstName,
+                expectedLastName,
+                classRoom,
+                null
+        );
+
+        Assertions.assertThrows(RuntimeException.class, () -> learnerRepository.add(learner));
+    }
+
+    @Test
+    public void updateWithExceptionTest() {
+        String expectedFirstName = "UpdateFirstName";
+        String expectedLastName = "UpdateLastName";
+        ClassRoom classRoom = new ClassRoom(19L, "1u");
+        Long expectedId = 5L;
+
+        Learner learnerUpdate = learnerRepository.getById(expectedId);
+        learnerUpdate.setFirstName(expectedFirstName);
+        learnerUpdate.setLastName(expectedLastName);
+        learnerUpdate.setClassRoom(classRoom);
+
+        Assertions.assertThrows(RuntimeException.class, () -> learnerRepository.update(learnerUpdate));
+    }
 }
