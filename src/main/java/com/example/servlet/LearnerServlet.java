@@ -66,7 +66,7 @@ public class LearnerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String respString = "";
-        int statusCode = HttpServletResponse.SC_BAD_REQUEST;
+        int statusCode = HttpServletResponse.SC_OK;
 
         // Чтение тела запроса и преобразование JSON в DTO
         LearnerRequestDto learnerRequestDto = objectMapper.readValue(req.getReader(), LearnerRequestDto.class);
