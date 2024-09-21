@@ -13,16 +13,13 @@ import java.lang.reflect.Field;
 class LearnerServiceImplTest {
     private static LearnerService service;
     private static LearnerRepository repository;
-    private static LearnerRepositoryImpl oldInstance;
 
     @BeforeAll
     static void beforeAll() {
-//        Создаем mock класса LearnerRepository
         repository = Mockito.mock(LearnerRepositoryImpl.class);
         try {
             Field instance = LearnerRepositoryImpl.class.getDeclaredField("instance");
             instance.setAccessible(true);
-            oldInstance = (LearnerRepositoryImpl) instance.get(instance);
             instance.set(instance, repository);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -40,7 +37,7 @@ class LearnerServiceImplTest {
         try {
             Field instance = LearnerRepositoryImpl.class.getDeclaredField("instance");
             instance.setAccessible(true);
-            instance.set(instance, oldInstance);
+            instance.set(instance, null);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

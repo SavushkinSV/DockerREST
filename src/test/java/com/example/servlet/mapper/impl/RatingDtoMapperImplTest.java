@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RatingDtoMapperImplTest {
+class RatingDtoMapperImplTest {
     private static final RatingDtoMapper mapper = RatingDtoMapperImpl.getInstance();
 
     @Test
-    public void mapDtoToRatingTest() {
+    void mapDtoToRatingTest() {
         RatingRequestDto dto = new RatingRequestDto(
                 1L,
                 "2021-01-01",
@@ -32,7 +32,7 @@ public class RatingDtoMapperImplTest {
     }
 
     @Test
-    public void mapRatingToDtoTest() {
+    void mapRatingToDtoTest() {
         Rating rating = new Rating(
                 1L,
                 "2021-01-01",
@@ -50,7 +50,7 @@ public class RatingDtoMapperImplTest {
     }
 
     @Test
-    public void mapListRatingToDtoTest() {
+    void mapListRatingToDtoTest() {
         List<Rating> ratingList = new ArrayList<>();
         ratingList.add(new Rating(1L, "2021-01-01", 0, "Test0"));
         ratingList.add(new Rating(2L, "2021-01-01", 1, "Test1"));
