@@ -19,7 +19,7 @@ import java.util.List;
 
 @WebServlet(name = "RatingServlet", value = "/rating/*")
 public class RatingServlet extends HttpServlet {
-    private static final String NOT_FOUND_REQUEST_MESSAGE = "Rating not found";
+    private static final String NOT_FOUND_REQUEST_MESSAGE = "Rating not found.";
 
     private static final RatingService service = RatingServiceImpl.getInstance();
     private static final RatingDtoMapper mapper = RatingDtoMapperImpl.getInstance();
@@ -91,7 +91,7 @@ public class RatingServlet extends HttpServlet {
                 if (status) {
                     statusCode = HttpServletResponse.SC_OK;
                 } else {
-                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    statusCode = HttpServletResponse.SC_NOT_FOUND;
                     respString = NOT_FOUND_REQUEST_MESSAGE;
                 }
             }

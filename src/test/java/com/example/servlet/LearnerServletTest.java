@@ -15,10 +15,12 @@ import org.mockito.MockitoAnnotations;
 import java.io.*;
 import java.lang.reflect.Field;
 
-public class LearnerServletTest {
+class LearnerServletTest {
+    private static LearnerRequestDto dto;
+    private static Learner learner;
     private static LearnerServlet servlet;
     private static LearnerService service = LearnerServiceImpl.getInstance();
-    private static LearnerServiceImpl oldInstance;
+    private static Gson gson;
 
     @Mock
     private HttpServletRequest mockReq;
@@ -26,19 +28,20 @@ public class LearnerServletTest {
     @Mock
     private HttpServletResponse mockResp;
 
-
     @BeforeAll
     static void beforeAll() {
         service = Mockito.mock(LearnerServiceImpl.class);
         try {
             Field instance = LearnerServiceImpl.class.getDeclaredField("instance");
             instance.setAccessible(true);
-            oldInstance = (LearnerServiceImpl) instance.get(instance);
             instance.set(instance, service);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         servlet = new LearnerServlet();
+        dto = new LearnerRequestDto(1L, "firstName", "lastName", null);
+        learner = new Learner(1L, "firstName", "lastName", null, null);
+        gson = new Gson();
     }
 
     @BeforeEach
@@ -57,15 +60,14 @@ public class LearnerServletTest {
         try {
             Field instance = LearnerServiceImpl.class.getDeclaredField("instance");
             instance.setAccessible(true);
-            instance.set(instance, oldInstance);
+            instance.set(instance, null);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void doGetByIdTest() throws IOException {
-        Learner learner = new Learner(1L, "firstName", "lastName", null, null);
+    void doGetByIdTest() throws IOException {
         Mockito.doReturn("learner/1").when(mockReq).getPathInfo();
         Mockito.doReturn(learner).when(service).getById(Mockito.anyLong());
 
@@ -76,7 +78,7 @@ public class LearnerServletTest {
     }
 
     @Test
-    public void doGetByIdWithNullTest() throws IOException {
+    void doGetByIdWithNullTest() throws IOException {
         Mockito.doReturn("learner/2").when(mockReq).getPathInfo();
         Mockito.doReturn(null).when(service).getById(Mockito.anyLong());
 
@@ -87,7 +89,7 @@ public class LearnerServletTest {
     }
 
     @Test
-    public void doGetAllTest() throws IOException {
+    void doGetAllTest() throws IOException {
         Mockito.doReturn("/").when(mockReq).getPathInfo();
 
         servlet.doGet(mockReq, mockResp);
@@ -97,12 +99,7 @@ public class LearnerServletTest {
     }
 
     @Test
-    public void doPostTest() throws IOException {
-        String firstName = "firstName";
-        String lastName = "lastName";
-        LearnerRequestDto dto = new LearnerRequestDto(null, firstName, lastName, null);
-        Learner learner = new Learner(1L, firstName, lastName, null, null);
-        Gson gson = new Gson();
+    void doPostTest() throws IOException {
         BufferedReader mockReader = new BufferedReader(new StringReader(gson.toJson(dto)));
         Mockito.doReturn(mockReader).when(mockReq).getReader();
         Mockito.doReturn(learner).when(service).add(Mockito.any(Learner.class));
@@ -114,7 +111,7 @@ public class LearnerServletTest {
 
 
     @Test
-    public void doDeleteTest() throws IOException {
+    void doDeleteTest() throws IOException {
         Mockito.doReturn("learner/1").when(mockReq).getPathInfo();
         Mockito.doReturn(true).when(service).delete(Mockito.anyLong());
 
@@ -125,7 +122,7 @@ public class LearnerServletTest {
     }
 
     @Test
-    public void doDeleteWithBadIdTest() throws IOException {
+    void doDeleteWithBadIdTest() throws IOException {
         Mockito.doReturn("learner/1").when(mockReq).getPathInfo();
         Mockito.doReturn(false).when(service).delete(Mockito.anyLong());
 
@@ -135,4 +132,26 @@ public class LearnerServletTest {
         Mockito.verify(mockResp).setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
+    @Test
+    void doPutTest() throws IOException {
+        BufferedReader mockReader = new BufferedReader(new StringReader(gson.toJson(dto)));
+        Mockito.doReturn(mockReader).when(mockReq).getReader();
+        Mockito.doReturn(learner).when(service).getById(Mockito.anyLong());
+
+        servlet.doPut(mockReq, mockResp);
+
+        Mockito.verify(service).update(Mockito.any(Learner.class));
+        Mockito.verify(mockResp).setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Test
+    void doPutWithNullTest() throws IOException {
+        BufferedReader mockReader = new BufferedReader(new StringReader(gson.toJson(dto)));
+        Mockito.doReturn(mockReader).when(mockReq).getReader();
+        Mockito.doReturn(null).when(service).getById(Mockito.anyLong());
+
+        servlet.doPut(mockReq, mockResp);
+
+        Mockito.verify(mockResp).setStatus(HttpServletResponse.SC_NOT_FOUND);
+    }
 }

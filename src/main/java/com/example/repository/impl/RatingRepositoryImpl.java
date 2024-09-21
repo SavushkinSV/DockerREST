@@ -2,6 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.exeption.RepositoryException;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 
@@ -37,11 +38,10 @@ public class RatingRepositoryImpl implements RatingRepository {
      */
     @Override
     public Rating add(Rating rating) {
-        String ADD_SQL = "INSERT INTO ratings (data, value, subject_name) VALUES (?, ?, ?);";
+        String addSql = "INSERT INTO ratings (data, value, subject_name) VALUES (?, ?, ?);";
 
-
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(addSql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setDate(1, Date.valueOf(rating.getDate()));
             preparedStatement.setInt(2, rating.getValue());
@@ -58,7 +58,7 @@ public class RatingRepositoryImpl implements RatingRepository {
                 );
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return rating;
@@ -71,16 +71,17 @@ public class RatingRepositoryImpl implements RatingRepository {
      */
     @Override
     public void update(Rating rating) {
-        String UPDATE_SQL = "UPDATE ratings SET data=?, value=?, subject_name=? WHERE id=?;";
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
+        String updateSql = "UPDATE ratings SET data=?, value=?, subject_name=? WHERE id=?;";
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(updateSql)) {
+
             preparedStatement.setDate(1, Date.valueOf(rating.getDate()));
             preparedStatement.setInt(2, rating.getValue());
             preparedStatement.setString(3, rating.getSubjectName());
             preparedStatement.setLong(4, rating.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
     }
 
@@ -94,13 +95,14 @@ public class RatingRepositoryImpl implements RatingRepository {
     @Override
     public boolean deleteById(Long id) {
         boolean result = false;
-        String DELETE_SQL = "DELETE FROM ratings WHERE id = ?;";
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
+        String deleteSql = "DELETE FROM ratings WHERE id = ?;";
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteSql)) {
+
             preparedStatement.setLong(1, id);
             result = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return result;
@@ -114,17 +116,17 @@ public class RatingRepositoryImpl implements RatingRepository {
      */
     @Override
     public Rating getById(Long id) {
-        String FIND_BY_ID_SQL = "SELECT id, data, value, subject_name FROM ratings WHERE id=?;";
+        String getByIdSql = "SELECT id, data, value, subject_name FROM ratings WHERE id=?;";
         Rating rating = null;
         try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);
+            PreparedStatement preparedStatement = connection.prepareStatement(getByIdSql);
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 rating = createRating(resultSet);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return rating;
@@ -137,16 +139,17 @@ public class RatingRepositoryImpl implements RatingRepository {
      */
     @Override
     public List<Rating> getAll() {
-        String FIND_ALL_SQL = "SELECT id, data, value, subject_name FROM ratings;";
+        String getAllSql = "SELECT id, data, value, subject_name FROM ratings;";
         List<Rating> ratingList = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(getAllSql)) {
+
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 ratingList.add(createRating(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return ratingList;

@@ -19,8 +19,9 @@ import java.util.List;
 
 @WebServlet(name = "LearnerServlet", value = "/learner/*")
 public class LearnerServlet extends HttpServlet {
-    private final LearnerService service = LearnerServiceImpl.getInstance();
-    private final LearnerDtoMapper mapper = LearnerDtoMapperImpl.getInstance();
+    private static final String NOT_FOUND_REQUEST_MESSAGE = "Learner not found.";
+    private static final LearnerService service = LearnerServiceImpl.getInstance();
+    private static final LearnerDtoMapper mapper = LearnerDtoMapperImpl.getInstance();
     private final ObjectMapper objectMapper;
 
     public LearnerServlet() {
@@ -89,13 +90,34 @@ public class LearnerServlet extends HttpServlet {
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
                 boolean status = service.delete(id);
-                if (status)
+                if (status) {
                     statusCode = HttpServletResponse.SC_OK;
-                else
+                } else {
+                    respString = NOT_FOUND_REQUEST_MESSAGE;
                     statusCode = HttpServletResponse.SC_NOT_FOUND;
+                }
             }
         } catch (Exception e) {
             respString = "Bad request.";
+        }
+        setJsonHeader(resp, statusCode);
+        PrintWriter printWriter = resp.getWriter();
+        printWriter.write(respString);
+        printWriter.flush();
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String respString = "";
+        int statusCode = HttpServletResponse.SC_NOT_FOUND;
+
+        LearnerRequestDto learnerRequestDto = objectMapper.readValue(req.getReader(), LearnerRequestDto.class);
+        Learner learner = service.getById(learnerRequestDto.getId());
+        if (learner != null) {
+            service.update(mapper.map(learnerRequestDto));
+            statusCode = HttpServletResponse.SC_OK;
+        } else {
+            respString = NOT_FOUND_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();

@@ -6,9 +6,6 @@ public class RatingResponseDto {
     private Integer value;
     private String subjectName;
 
-    public RatingResponseDto() {
-    }
-
     public RatingResponseDto(Long id, String date, Integer value, String subjectName) {
         this.id = id;
         this.date = date;

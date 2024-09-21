@@ -1,5 +1,6 @@
 package com.example.db;
 
+import com.example.exeption.DBConnectException;
 import com.example.util.PropertiesUtil;
 
 import java.sql.Connection;
@@ -40,10 +41,8 @@ public class ConnectionManagerImpl implements IConnectionManager {
             try {
                 String driverClass = PropertiesUtil.getProperty(DB_DRIVER_CLASS_NAME_KEY);
                 Class.forName(driverClass);
-                System.out.println("Database driver loaded.");
             } catch (ClassNotFoundException e) {
-                System.out.println("Database driver not loaded.");
-                throw new RuntimeException(e);
+                throw new DBConnectException(e.getMessage());
             }
         }
 
@@ -56,7 +55,7 @@ public class ConnectionManagerImpl implements IConnectionManager {
      * @return соединение с базой данных
      * @throws SQLException если произошла ошибка доступа к базе данных или URL-адрес имеет значение NULL
      */
-    public Connection getConnection() {
+    public Connection getConnection()  {
         String url = PropertiesUtil.getProperty(DB_CONTAINER_URL_KEY) +
                 PropertiesUtil.getProperty(DB_CONTAINER_PORT_KEY) + "/" +
                 PropertiesUtil.getProperty(DB_NAME_KEY);
@@ -86,8 +85,9 @@ public class ConnectionManagerImpl implements IConnectionManager {
                     PropertiesUtil.getProperty(DB_PASSWORD_KEY)
             );
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DBConnectException(e.getMessage());
         }
+
         return connection;
     }
 }

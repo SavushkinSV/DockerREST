@@ -2,6 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.exeption.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.model.Rating;
@@ -43,9 +44,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     @Override
     public Learner add(Learner learner) {
-        String ADD_SQL = "INSERT INTO learners (first_name, last_name, class_id) VALUES (?, ?, ?);";
+        String addSql = "INSERT INTO learners (first_name, last_name, class_id) VALUES (?, ?, ?);";
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(addSql, Statement.RETURN_GENERATED_KEYS)) {
 
 
             preparedStatement.setString(1, learner.getFirstName());
@@ -68,7 +69,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 );
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return learner;
@@ -85,7 +86,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         final String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
         Learner leaner = null;
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -93,7 +94,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 leaner = createLearner(resultSet);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
         if (leaner != null) {
             leaner.setRatingList(saveRatingList(leaner.getId()));
@@ -109,9 +110,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     @Override
     public void update(Learner learner) {
-        String UPDATE_SQL = "UPDATE learners SET first_name=?, last_name=?, class_id=? WHERE id=?;";
+        String updateSql = "UPDATE learners SET first_name=?, last_name=?, class_id=? WHERE id=?;";
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(updateSql)) {
 
             preparedStatement.setString(1, learner.getFirstName());
             preparedStatement.setString(2, learner.getLastName());
@@ -123,7 +124,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
             preparedStatement.setLong(4, learner.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
     }
 
@@ -136,16 +137,16 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     @Override
     public boolean deleteById(Long id) {
-        boolean result = false;
-        String DELETE_SQL = "DELETE FROM learners WHERE id = ?;";
+        boolean result;
+        String deleteSql = "DELETE FROM learners WHERE id = ?;";
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteSql)) {
 
             preparedStatement.setLong(1, id);
 
             result = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return result;
@@ -158,10 +159,10 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     @Override
     public List<Learner> getAll() {
-        String FIND_ALL_SQL = "SELECT id, first_name, last_name, class_id FROM learners;";
+        String getAllSql = "SELECT id, first_name, last_name, class_id FROM learners;";
         List<Learner> learnerList = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(getAllSql)) {
 
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -169,7 +170,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 learnerList.add(createLearner(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
         if (!learnerList.isEmpty()) {
             learnerList.stream().forEach(x -> x.setRatingList(saveRatingList(x.getId())));
@@ -183,7 +184,6 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      *
      * @param resultSet результат запроса
      * @return сущность
-     * @throws SQLException
      */
     private static Learner createLearner(ResultSet resultSet) throws SQLException {
         Long learnerId = resultSet.getLong("id");
@@ -207,7 +207,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         List<Rating> ratingList = new ArrayList<>();
         final String FIND_RATINGS_BY_ID_SQL = "SELECT r.id, data, value, subject_name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_RATINGS_BY_ID_SQL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_RATINGS_BY_ID_SQL)) {
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -216,7 +216,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
                 ratingList.add(ratingRepository.getById(ratingId));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RepositoryException(e.getMessage());
         }
 
         return ratingList;
