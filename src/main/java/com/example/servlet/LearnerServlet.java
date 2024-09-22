@@ -28,7 +28,7 @@ public class LearnerServlet extends HttpServlet {
         this.objectMapper = new ObjectMapper();
     }
 
-    @Override
+   @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String respString = "";
         int statusCode = HttpServletResponse.SC_BAD_REQUEST;
@@ -56,6 +56,7 @@ public class LearnerServlet extends HttpServlet {
         } catch (Exception e) {
             statusCode = HttpServletResponse.SC_BAD_REQUEST;
             respString = "Bad request.";
+            throw new RuntimeException(e);
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();

@@ -1,20 +1,21 @@
 package com.example.servlet.dto;
 
-import com.example.model.Learner;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClassRoomResponseDto {
     private Long id;
     private String code;
+    private List<LearnerResponseDto> learnerList = new ArrayList<>();
 
     public ClassRoomResponseDto() {
     }
 
-    public ClassRoomResponseDto(Long id, String code) {
+    public ClassRoomResponseDto(Long id, String code, List<LearnerResponseDto> learnerList) {
         this.id = id;
         this.code = code;
-
+        if (learnerList != null)
+            this.learnerList = learnerList;
     }
 
     public Long getId() {
@@ -33,4 +34,11 @@ public class ClassRoomResponseDto {
         this.code = code;
     }
 
+    public List<LearnerResponseDto> getLearnerList() {
+        return learnerList;
+    }
+
+    public void setLearnerList(List<LearnerResponseDto> learnerList) {
+        this.learnerList = learnerList;
+    }
 }

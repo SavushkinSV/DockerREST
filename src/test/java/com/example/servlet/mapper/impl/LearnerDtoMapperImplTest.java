@@ -11,16 +11,16 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
- class LearnerDtoMapperImplTest {
+class LearnerDtoMapperImplTest {
     private static final LearnerDtoMapper mapper = LearnerDtoMapperImpl.getInstance();
 
     @Test
-     void mapDtoToLearnerTest() {
+    void mapDtoToLearnerTest() {
         LearnerRequestDto dto = new LearnerRequestDto(
                 1L,
                 "firstName",
                 "lastName",
-                new ClassRoom(1L, "1а")
+                new ClassRoom(1L, "1а", null)
         );
 
         Learner result = mapper.map(dto);
@@ -35,12 +35,15 @@ import java.util.List;
     }
 
     @Test
-     void mapLearnerToDtoTest() {
+    void mapLearnerToDtoTest() {
+        List<Learner> learnerList = new ArrayList<>();
+        learnerList.add(new Learner(1L, "first", "last", null, null));
+
         Learner learner = new Learner(
                 1L,
                 "firstName",
                 "lastName",
-                new ClassRoom(1L, "1а"),
+                new ClassRoom(1L, "1а", learnerList),
                 null
         );
 
@@ -56,7 +59,7 @@ import java.util.List;
     }
 
     @Test
-     void mapListLearnerToDtoTest() {
+    void mapListLearnerToDtoTest() {
         List<Learner> learnerList = new ArrayList<>();
         learnerList.add(new Learner(1L, "firstName0", "lastName0", null, null));
         learnerList.add(new Learner(2L, "firstName1", "lastName1", null, null));

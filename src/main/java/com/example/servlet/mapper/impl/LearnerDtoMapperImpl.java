@@ -65,6 +65,9 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
      */
     @Override
     public List<LearnerResponseDto> map(List<Learner> learnerList) {
+        if (learnerList == null) {
+            return null;
+        }
         List<LearnerResponseDto> responseDtos;
         responseDtos = learnerList.stream().map(this::map).toList();
 

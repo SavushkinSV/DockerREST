@@ -1,6 +1,6 @@
 package com.example.db;
 
-import com.example.exeption.DBConnectException;
+import com.example.exception.DBConnectException;
 import com.example.util.PropertiesUtil;
 
 import java.sql.Connection;
@@ -35,7 +35,7 @@ public class ConnectionManagerImpl implements IConnectionManager {
      * @return объект класса
      * @throws ClassNotFoundException если класс не найден
      */
-    public static IConnectionManager getInstance() {
+    public static  IConnectionManager getInstance() {
         if (instance == null) {
             instance = new ConnectionManagerImpl();
             try {

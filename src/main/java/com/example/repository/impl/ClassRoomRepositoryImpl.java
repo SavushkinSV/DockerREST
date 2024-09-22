@@ -2,7 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
-import com.example.exeption.RepositoryException;
+import com.example.exception.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 
@@ -36,7 +36,7 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
-                classRoom = new ClassRoom(resultSet.getLong("id"), classRoom.getCode());
+                classRoom = new ClassRoom(resultSet.getLong("id"), classRoom.getCode(), null);
             }
 
         } catch (SQLException e) {
@@ -116,7 +116,8 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
     private ClassRoom createClassRoom(ResultSet resultSet) throws SQLException {
         return new ClassRoom(
                 resultSet.getLong("id"),
-                resultSet.getString("code")
+                resultSet.getString("code"),
+                null
         );
     }
 }

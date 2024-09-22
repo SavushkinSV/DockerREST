@@ -111,7 +111,7 @@ public class LearnerRepositoryImplTest {
     void addTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
-        ClassRoom classRoom = new ClassRoom(2L, "1б");
+        ClassRoom classRoom = new ClassRoom(2L, "1б", null);
 
         Learner learner = new Learner(
                 null,
@@ -174,7 +174,7 @@ public class LearnerRepositoryImplTest {
     void addWithExceptionTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
-        ClassRoom classRoom = new ClassRoom(19L, "1u");
+        ClassRoom classRoom = new ClassRoom(19L, "1u", null);
 
         Learner learner = new Learner(
                 null,
@@ -191,7 +191,7 @@ public class LearnerRepositoryImplTest {
     void updateWithExceptionTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
-        ClassRoom classRoom = new ClassRoom(19L, "1u");
+        ClassRoom classRoom = new ClassRoom(19L, "1u", null);
         Long expectedId = 5L;
 
         Learner learnerUpdate = learnerRepository.getById(expectedId);

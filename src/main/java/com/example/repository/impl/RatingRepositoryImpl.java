@@ -2,7 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
-import com.example.exeption.RepositoryException;
+import com.example.exception.RepositoryException;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 

@@ -44,8 +44,10 @@ class LearnerServletTest {
         }
         servlet = new LearnerServlet();
 
-        dto = new LearnerRequestDto(1L, "firstName", "lastName", new ClassRoom(1L, "1а"));
-        learner = new Learner(1L, "firstName", "lastName", new ClassRoom(1L, "1а"), null);
+        dto = new LearnerRequestDto(1L, "firstName", "lastName", new ClassRoom(1L, "1а", null));
+        List<Learner> learnerList = new ArrayList<>();
+        learnerList.add(new Learner(1L, "first", "last", null, null));
+        learner = new Learner(1L, "firstName", "lastName", new ClassRoom(1L, "1а", learnerList), null);
         List<Rating> ratingList = new ArrayList<>();
         ratingList.add(new Rating(1L, "2021-01-01", 5, "Test"));
         learner.setRatingList(ratingList);

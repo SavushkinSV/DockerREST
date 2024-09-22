@@ -99,7 +99,7 @@ public class ClassRoomRepositoryImplTest {
     @Test
     void addTest() {
         String expectedCode = "10б";
-        ClassRoom classRoom = new ClassRoom(null, expectedCode);
+        ClassRoom classRoom = new ClassRoom(null, expectedCode, null);
 
         classRoom = repository.add(classRoom);
         ClassRoom addClassRoom = repository.getById(classRoom.getId());

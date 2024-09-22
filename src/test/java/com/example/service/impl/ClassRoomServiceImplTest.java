@@ -15,7 +15,8 @@ import java.lang.reflect.Field;
     private static ClassRoomRepository repository;
     private static final ClassRoom mockClassRoom = new ClassRoom(
             1L,
-            "1а"
+            "1а",
+            null
     );
 
     @BeforeAll

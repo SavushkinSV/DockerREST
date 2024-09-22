@@ -1,5 +1,6 @@
 package com.example.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class Rating {
     private String date;
     private Integer value;
     private String subjectName;
-    private List<Learner> learnerList;
+    private List<Learner> learnerList = new ArrayList<>();
 
     public Rating() {
     }
