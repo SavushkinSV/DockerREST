@@ -23,7 +23,6 @@ class RatingServiceImplTest {
 
     @BeforeAll
     static void beforeAll() {
-//        Создаем mock класса LearnerRepository
         repository = Mockito.mock(RatingRepositoryImpl.class);
         try {
             Field instance = RatingRepositoryImpl.class.getDeclaredField("instance");
@@ -82,6 +81,7 @@ class RatingServiceImplTest {
     @Test
     void deleteByIdTest() {
         Mockito.doReturn(true).when(repository).deleteById(Mockito.any(Long.class));
+
         boolean result = service.delete(5L);
 
         Assertions.assertTrue(result);
