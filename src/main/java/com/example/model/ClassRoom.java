@@ -1,10 +1,5 @@
 package com.example.model;
 
-import com.example.repository.LearnerRepository;
-import com.example.repository.impl.LearnerRepositoryImpl;
-
-import java.util.List;
-
 /**
  * Сущность учебный класс, в которых учатся ученики.
  * Связи:
@@ -13,8 +8,6 @@ import java.util.List;
 public class ClassRoom {
     private Long id;
     private String code;
-    private List<Learner> learnerList;
-    private static final LearnerRepository learnerRepository = LearnerRepositoryImpl.getInstance();
 
     public ClassRoom() {
     }
@@ -40,14 +33,4 @@ public class ClassRoom {
         this.code = code;
     }
 
-    public List<Learner> getLearnerList() {
-        if (this.learnerList == null) {
-            this.learnerList = learnerRepository.getAllByClassRoomId(this.id);
-        }
-        return learnerList;
-    }
-
-    public void setLearnerList(List<Learner> learnerList) {
-        this.learnerList = learnerList;
-    }
 }

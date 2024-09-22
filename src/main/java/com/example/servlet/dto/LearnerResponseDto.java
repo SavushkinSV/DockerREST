@@ -1,6 +1,5 @@
 package com.example.servlet.dto;
 
-import com.example.model.ClassRoom;
 import com.example.model.Rating;
 
 import java.util.List;

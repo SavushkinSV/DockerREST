@@ -8,8 +8,8 @@ import java.util.List;
 /**
  * Сущность ученик.
  * Связи:
- * ManyToOne -> classRoom
- * ManyToMany <-> Rating
+ * ManyToOne: Learner -> ClassRoom
+ * ManyToMany Learner <-> Rating
  */
 public class Learner {
     private Long id;
