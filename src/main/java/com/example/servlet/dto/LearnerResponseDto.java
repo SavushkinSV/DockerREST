@@ -12,10 +12,10 @@ public class LearnerResponseDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private ClassRoom classRoom;
+    private ClassRoomResponseDto classRoom;
     private List<Rating> ratingList;
 
-    public LearnerResponseDto(Long id, String firstName, String lastName, ClassRoom classRoom, List<Rating> ratingList) {
+    public LearnerResponseDto(Long id, String firstName, String lastName, ClassRoomResponseDto classRoom, List<Rating> ratingList) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,7 +35,7 @@ public class LearnerResponseDto {
         return lastName;
     }
 
-    public ClassRoom getClassRoom() {
+    public ClassRoomResponseDto getClassRoom() {
         return classRoom;
     }
 

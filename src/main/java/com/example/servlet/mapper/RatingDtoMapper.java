@@ -12,4 +12,5 @@ public interface RatingDtoMapper {
     RatingResponseDto map(Rating rating);
 
     List<RatingResponseDto> map(List<Rating> ratingList);
+
 }

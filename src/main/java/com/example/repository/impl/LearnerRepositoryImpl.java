@@ -5,10 +5,8 @@ import com.example.db.IConnectionManager;
 import com.example.exeption.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.model.Learner;
-import com.example.model.Rating;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.LearnerRepository;
-import com.example.repository.RatingRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +16,6 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     private static LearnerRepositoryImpl instance;
     private static final IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private static final ClassRoomRepository classRoomRepository = ClassRoomRepositoryImpl.getInstance();
-    private static final RatingRepository ratingRepository = RatingRepositoryImpl.getInstance();
 
     private LearnerRepositoryImpl() {
     }
@@ -78,18 +75,17 @@ public class LearnerRepositoryImpl implements LearnerRepository {
     public Learner getById(Long id) {
         final String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
         Learner leaner = null;
-        try (Connection connection = connectionManager.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 leaner = createLearner(resultSet);
+
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());
-        }
-        if (leaner != null) {
-            leaner.setRatingList(saveRatingList(leaner.getId()));
         }
 
         return leaner;
@@ -160,9 +156,6 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());
         }
-        if (!learnerList.isEmpty()) {
-            learnerList.stream().forEach(x -> x.setRatingList(saveRatingList(x.getId())));
-        }
 
         return learnerList;
     }
@@ -180,26 +173,28 @@ public class LearnerRepositoryImpl implements LearnerRepository {
         return new Learner(learnerId, resultSet.getString("first_name"), resultSet.getString("last_name"), classRoom, null);
     }
 
-    /**
-     * Сохраняет список оценок сущности Learner по идентификатору.
-     *
-     * @param id идентификатор
-     */
-    private List<Rating> saveRatingList(Long id) {
-        List<Rating> ratingList = new ArrayList<>();
-        final String FIND_RATINGS_BY_ID_SQL = "SELECT r.id, data, value, subject_name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
-        try (Connection connection = connectionManager.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(FIND_RATINGS_BY_ID_SQL)) {
+    @Override
+    public List<Learner> getAllByClassRoomId(Long classRoomId) {
+        List<Learner> learnerList = new ArrayList<>();
+        String getAllByClassRoomIdSql = "SELECT id, first_name, last_name, class_id FROM learners WHERE class_id=?;";
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(getAllByClassRoomIdSql)) {
 
-            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(1, classRoomId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long ratingId = resultSet.getLong("id");
-                ratingList.add(ratingRepository.getById(ratingId));
+                learnerList.add(new Learner(
+                        resultSet.getLong("id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        null,
+                        null)
+                );
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());
         }
 
-        return ratingList;
+        return learnerList;
     }
 }

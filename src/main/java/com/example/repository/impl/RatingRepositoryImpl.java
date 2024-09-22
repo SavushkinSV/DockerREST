@@ -118,8 +118,9 @@ public class RatingRepositoryImpl implements RatingRepository {
     public Rating getById(Long id) {
         String getByIdSql = "SELECT id, data, value, subject_name FROM ratings WHERE id=?;";
         Rating rating = null;
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(getByIdSql);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(getByIdSql);) {
+
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -171,5 +172,24 @@ public class RatingRepositoryImpl implements RatingRepository {
                 resultSet.getInt("value"),
                 resultSet.getString("subject_name")
         );
+    }
+
+    @Override
+    public List<Rating> getAllByLearnerId(Long learnerId) {
+        List<Rating> ratingList = new ArrayList<>();
+        String getAllByLearnerIdSql = "SELECT r.id, data, value, subject_name FROM ratings r JOIN learner_ratings lr ON r.id=lr.rating_id WHERE lr.learner_id=?;";
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(getAllByLearnerIdSql)) {
+
+            preparedStatement.setLong(1, learnerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ratingList.add(createRating(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException(e.getMessage());
+        }
+
+        return ratingList;
     }
 }

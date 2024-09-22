@@ -1,12 +1,15 @@
 package com.example.model;
 
+import com.example.repository.RatingRepository;
+import com.example.repository.impl.RatingRepositoryImpl;
+
 import java.util.List;
 
 /**
  * Сущность ученик.
  * Связи:
  * ManyToOne -> classRoom
- * ManeToMany <-> Rating
+ * ManyToMany <-> Rating
  */
 public class Learner {
     private Long id;
@@ -14,6 +17,8 @@ public class Learner {
     private String lastName;
     private ClassRoom classRoom;
     private List<Rating> ratingList;
+
+    private static final RatingRepository ratingRepository = RatingRepositoryImpl.getInstance();
 
     public Learner() {
     }
@@ -59,6 +64,9 @@ public class Learner {
     }
 
     public List<Rating> getRatingList() {
+        if (this.ratingList == null) {
+            this.ratingList = ratingRepository.getAllByLearnerId(this.id);
+        }
         return ratingList;
     }
 

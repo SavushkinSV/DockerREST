@@ -6,6 +6,7 @@ import com.example.exeption.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,6 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
     public ClassRoom getById(Long id) {
         String findByIdSql = "SELECT id, code FROM class_rooms WHERE id=?;";
         ClassRoom classRoom = null;
-        IConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
 
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findByIdSql);) {
@@ -86,7 +86,7 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                classRoom = createClassRoom(resultSet);
+                classRoom = createClassRoom(resultSet);//
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());

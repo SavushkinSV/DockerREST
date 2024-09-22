@@ -1,6 +1,8 @@
 package com.example.servlet;
 
+import com.example.model.ClassRoom;
 import com.example.model.Learner;
+import com.example.model.Rating;
 import com.example.services.LearnerService;
 import com.example.services.impl.LearnerServiceImpl;
 import com.example.servlet.dto.LearnerRequestDto;
@@ -14,6 +16,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 class LearnerServletTest {
     private static LearnerRequestDto dto;
@@ -39,8 +43,12 @@ class LearnerServletTest {
             throw new RuntimeException(e);
         }
         servlet = new LearnerServlet();
-        dto = new LearnerRequestDto(1L, "firstName", "lastName", null);
-        learner = new Learner(1L, "firstName", "lastName", null, null);
+
+        dto = new LearnerRequestDto(1L, "firstName", "lastName", new ClassRoom(1L, "1а"));
+        learner = new Learner(1L, "firstName", "lastName", new ClassRoom(1L, "1а"), null);
+        List<Rating> ratingList = new ArrayList<>();
+        ratingList.add(new Rating(1L, "2021-01-01", 5, "Test"));
+        learner.setRatingList(ratingList);
         gson = new Gson();
     }
 
@@ -73,7 +81,7 @@ class LearnerServletTest {
 
         servlet.doGet(mockReq, mockResp);
 
-        Mockito.verify(service).getById(1L);
+        Mockito.verify(service).getById(Mockito.anyLong());
         Mockito.verify(mockResp).setStatus(HttpServletResponse.SC_OK);
     }
 

@@ -3,12 +3,14 @@ package com.example.servlet.mapper.impl;
 import com.example.model.Learner;
 import com.example.servlet.dto.LearnerRequestDto;
 import com.example.servlet.dto.LearnerResponseDto;
+import com.example.servlet.mapper.ClassRoomDtoMapper;
 import com.example.servlet.mapper.LearnerDtoMapper;
 
 import java.util.List;
 
 public class LearnerDtoMapperImpl implements LearnerDtoMapper {
     private static LearnerDtoMapper instance;
+    private static final ClassRoomDtoMapper classRoomDtoMapper = ClassRoomDtoMapperImpl.getInstance();
 
     private LearnerDtoMapperImpl() {
     }
@@ -50,8 +52,8 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
                 learner.getId(),
                 learner.getFirstName(),
                 learner.getLastName(),
-                learner.getClassRoom(),
-                learner.getRatingList()
+                classRoomDtoMapper.map(learner.getClassRoom()),
+                null
         );
     }
 

@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LearnerDtoMapperImplTest {
+ class LearnerDtoMapperImplTest {
     private static final LearnerDtoMapper mapper = LearnerDtoMapperImpl.getInstance();
 
     @Test
-    public void mapDtoToLearnerTest() {
+     void mapDtoToLearnerTest() {
         LearnerRequestDto dto = new LearnerRequestDto(
                 1L,
                 "firstName",
@@ -35,7 +35,7 @@ public class LearnerDtoMapperImplTest {
     }
 
     @Test
-    public void mapLearnerToDtoTest() {
+     void mapLearnerToDtoTest() {
         Learner learner = new Learner(
                 1L,
                 "firstName",
@@ -56,7 +56,7 @@ public class LearnerDtoMapperImplTest {
     }
 
     @Test
-    public void mapListLearnerToDtoTest() {
+     void mapListLearnerToDtoTest() {
         List<Learner> learnerList = new ArrayList<>();
         learnerList.add(new Learner(1L, "firstName0", "lastName0", null, null));
         learnerList.add(new Learner(2L, "firstName1", "lastName1", null, null));

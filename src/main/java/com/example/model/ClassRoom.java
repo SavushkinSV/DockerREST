@@ -1,5 +1,8 @@
 package com.example.model;
 
+import com.example.repository.LearnerRepository;
+import com.example.repository.impl.LearnerRepositoryImpl;
+
 import java.util.List;
 
 /**
@@ -11,6 +14,7 @@ public class ClassRoom {
     private Long id;
     private String code;
     private List<Learner> learnerList;
+    private static final LearnerRepository learnerRepository = LearnerRepositoryImpl.getInstance();
 
     public ClassRoom() {
     }
@@ -18,7 +22,6 @@ public class ClassRoom {
     public ClassRoom(Long id, String code) {
         this.id = id;
         this.code = code;
-        this.learnerList = null;
     }
 
     public Long getId() {
@@ -38,6 +41,9 @@ public class ClassRoom {
     }
 
     public List<Learner> getLearnerList() {
+        if (this.learnerList == null) {
+            this.learnerList = learnerRepository.getAllByClassRoomId(this.id);
+        }
         return learnerList;
     }
 
