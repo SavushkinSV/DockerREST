@@ -1,5 +1,7 @@
 package com.example.model;
 
+import java.util.List;
+
 /**
  * Сущность учебный класс, в которых учатся ученики.
  * Связи:
@@ -8,6 +10,7 @@ package com.example.model;
 public class ClassRoom {
     private Long id;
     private String code;
+    private List<Learner> learnerList;
 
     public ClassRoom() {
     }
@@ -15,6 +18,7 @@ public class ClassRoom {
     public ClassRoom(Long id, String code) {
         this.id = id;
         this.code = code;
+        this.learnerList = null;
     }
 
     public Long getId() {
@@ -33,4 +37,11 @@ public class ClassRoom {
         this.code = code;
     }
 
+    public List<Learner> getLearnerList() {
+        return learnerList;
+    }
+
+    public void setLearnerList(List<Learner> learnerList) {
+        this.learnerList = learnerList;
+    }
 }

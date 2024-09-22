@@ -56,7 +56,7 @@ public class LearnerRepositoryImplTest {
 
     @ParameterizedTest
     @CsvSource(value = {"1", "3", "5"})
-    public void getByIdTest(Long expectedId) {
+    void getByIdTest(Long expectedId) {
         Learner learner = learnerRepository.getById(expectedId);
 
         Assertions.assertNotNull(learner);
@@ -64,14 +64,14 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void getByIdNegativeTest() {
+    void getByIdNegativeTest() {
         Learner learner = learnerRepository.getById(15L);
 
         Assertions.assertNull(learner);
     }
 
     @Test
-    public void getAllTest() {
+    void getAllTest() {
         int expectedSize = 6;
         int resultSize = learnerRepository.getAll().size();
 
@@ -79,7 +79,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void deleteByIdTest() {
+    void deleteByIdTest() {
         boolean expected = true;
         int expectedSize = learnerRepository.getAll().size() - 1;
 
@@ -91,10 +91,9 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void updateTest() {
+    void updateTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
-        String expectedClassName = "2а";
         Long expectedId = 6L;
 
         Learner learnerUpdate = learnerRepository.getById(expectedId);
@@ -109,7 +108,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void addTest() {
+    void addTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         ClassRoom classRoom = new ClassRoom(2L, "1б");
@@ -132,7 +131,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void addTestWithClassRoomNull() {
+    void addTestWithClassRoomNull() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
 
@@ -153,7 +152,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void updateWithClassRoomTest() {
+    void updateWithClassRoomTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         Long expectedId = 6L;
@@ -172,7 +171,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void addWithExceptionTest() {
+    void addWithExceptionTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         ClassRoom classRoom = new ClassRoom(19L, "1u");
@@ -189,7 +188,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    public void updateWithExceptionTest() {
+    void updateWithExceptionTest() {
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         ClassRoom classRoom = new ClassRoom(19L, "1u");
