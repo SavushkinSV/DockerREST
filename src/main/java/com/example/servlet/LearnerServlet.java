@@ -8,6 +8,7 @@ import com.example.servlet.dto.LearnerResponseDto;
 import com.example.servlet.mapper.LearnerDtoMapper;
 import com.example.servlet.mapper.impl.LearnerDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class LearnerServlet extends HttpServlet {
         this.objectMapper = new ObjectMapper();
     }
 
-   @Override
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String respString = "";
         int statusCode = HttpServletResponse.SC_BAD_REQUEST;
@@ -36,16 +37,11 @@ public class LearnerServlet extends HttpServlet {
             String[] reqString = req.getPathInfo().split("/");
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
-                Learner learner = service.getById(id);
-                if (learner != null) {
-                    LearnerResponseDto responseDto = mapper.map(learner);
-                    // return our DTO
-                    statusCode = HttpServletResponse.SC_OK;
-                    respString = objectMapper.writeValueAsString(responseDto);
-                } else {
-                    statusCode = HttpServletResponse.SC_NOT_FOUND;
-                    respString = "Learner not found";
-                }
+//                Learner learner = service.getById(id);
+//                LearnerResponseDto responseDto = mapper.map(learner);
+                // return our DTO
+                statusCode = HttpServletResponse.SC_OK;
+//                respString = objectMapper.writeValueAsString(responseDto);
             } else if (reqString.length == 0) {
                 List<Learner> learnerList = service.getAll();
                 // return our DTO
@@ -53,6 +49,9 @@ public class LearnerServlet extends HttpServlet {
                 statusCode = HttpServletResponse.SC_OK;
                 respString = objectMapper.writeValueAsString(responseDtoList);
             }
+//        } catch (ObjectNotFoundException e) {
+//            statusCode = HttpServletResponse.SC_NOT_FOUND;
+//            respString = "Learner not found";
         } catch (Exception e) {
             statusCode = HttpServletResponse.SC_BAD_REQUEST;
             respString = "Bad request.";
@@ -113,13 +112,14 @@ public class LearnerServlet extends HttpServlet {
         int statusCode = HttpServletResponse.SC_NOT_FOUND;
 
         LearnerRequestDto learnerRequestDto = objectMapper.readValue(req.getReader(), LearnerRequestDto.class);
-        Learner learner = service.getById(learnerRequestDto.getId());
-        if (learner != null) {
+        try {
+            Learner learner = service.getById(learnerRequestDto.getId());
             service.update(mapper.map(learnerRequestDto));
             statusCode = HttpServletResponse.SC_OK;
-        } else {
+        } catch (ObjectNotFoundException e) {
             respString = NOT_FOUND_REQUEST_MESSAGE;
         }
+
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
         printWriter.write(respString);

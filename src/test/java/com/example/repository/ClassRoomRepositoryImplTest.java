@@ -8,6 +8,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -56,7 +57,7 @@ public class ClassRoomRepositoryImplTest {
 
     @ParameterizedTest
     @CsvSource(value = {"1", "3", "5"})
-    void getByIdTest(Long expectedId) {
+    void getByIdTest(Long expectedId) throws ObjectNotFoundException {
         ClassRoom classRoom = repository.getById(expectedId);
 
         Assertions.assertNotNull(classRoom);
@@ -64,7 +65,7 @@ public class ClassRoomRepositoryImplTest {
     }
 
     @Test
-    void getByIdNegativeTest() {
+    void getByIdNegativeTest() throws ObjectNotFoundException{
         ClassRoom classRoom = repository.getById(15L);
 
         Assertions.assertNull(classRoom);
@@ -83,7 +84,7 @@ public class ClassRoomRepositoryImplTest {
     }
 
     @Test
-    void updateTest() {
+    void updateTest() throws ObjectNotFoundException{
         String expectedCode = "10б";
         Long expectedId = 5L;
 
@@ -97,7 +98,7 @@ public class ClassRoomRepositoryImplTest {
     }
 
     @Test
-    void addTest() {
+    void addTest() throws ObjectNotFoundException{
         String expectedCode = "10б";
         ClassRoom classRoom = new ClassRoom(null, expectedCode, null);
 

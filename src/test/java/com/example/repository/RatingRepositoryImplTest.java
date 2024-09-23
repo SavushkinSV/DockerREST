@@ -7,6 +7,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -55,7 +56,7 @@ public class RatingRepositoryImplTest {
 
     @ParameterizedTest
     @CsvSource(value = {"1", "3", "5"})
-    public void getByIdTest(Long expectedId) {
+     void getByIdTest(Long expectedId) throws ObjectNotFoundException {
         Rating rating = ratingRepository.getById(expectedId);
 
         Assertions.assertNotNull(rating);
@@ -63,14 +64,12 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void getByIdNegativeTest() {
-        Rating rating = ratingRepository.getById(15L);
-
-        Assertions.assertNull(rating);
+     void getByIdNegativeTest(){
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> ratingRepository.getById(15L));
     }
 
     @Test
-    public void getAllTest() {
+     void getAllTest() {
         int expectedSize = 9;
         int resultSize = ratingRepository.getAll().size();
 
@@ -78,7 +77,7 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void deleteByIdTest() {
+     void deleteByIdTest() {
         boolean expected = true;
         int expectedSize = ratingRepository.getAll().size() - 1;
 
@@ -102,7 +101,7 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void addTest() {
+    public void addTest() throws ObjectNotFoundException{
         String expectedDate = "2024-12-31";
         Integer expectedValue = 0;
         String expectedSubjectName = "Test";
@@ -122,7 +121,7 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws ObjectNotFoundException{
         String expectedDate = "2001-12-01";
         Integer expectedValue = 1;
         String expectedSubjectName = "Test";

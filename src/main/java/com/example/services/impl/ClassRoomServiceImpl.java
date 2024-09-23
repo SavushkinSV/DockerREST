@@ -4,6 +4,7 @@ import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
 import com.example.services.ClassRoomService;
+import jakarta.ejb.ObjectNotFoundException;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
-    public ClassRoom getById(Long id) {
+    public ClassRoom getById(Long id) throws ObjectNotFoundException {
         return repository.getById(id);
     }
 

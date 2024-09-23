@@ -7,6 +7,7 @@ import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.LearnerRepository;
+import jakarta.ejb.ObjectNotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -72,9 +73,9 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      * @return сущность
      */
     @Override
-    public Learner getById(Long id) {
+    public Learner getById(Long id) throws ObjectNotFoundException {
         final String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
-        Learner leaner = null;
+        Learner leaner;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
 
@@ -82,7 +83,8 @@ public class LearnerRepositoryImpl implements LearnerRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 leaner = createLearner(resultSet);
-
+            } else {
+                throw new ObjectNotFoundException("Learner not found.");
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());
@@ -168,8 +170,12 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     private static Learner createLearner(ResultSet resultSet) throws SQLException {
         Long learnerId = resultSet.getLong("id");
-        ClassRoom classRoom = classRoomRepository.getById(resultSet.getLong("class_id"));
-
+        ClassRoom classRoom = null;
+        try {
+            classRoom = classRoomRepository.getById(resultSet.getLong("class_id"));
+        } catch (ObjectNotFoundException e) {
+            System.out.println("ClassRoom not found.");
+        }
         return new Learner(learnerId, resultSet.getString("first_name"), resultSet.getString("last_name"), classRoom, null);
     }
 

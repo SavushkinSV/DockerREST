@@ -8,6 +8,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -56,7 +57,7 @@ public class LearnerRepositoryImplTest {
 
     @ParameterizedTest
     @CsvSource(value = {"1", "3", "5"})
-    void getByIdTest(Long expectedId) {
+    void getByIdTest(Long expectedId) throws ObjectNotFoundException {
         Learner learner = learnerRepository.getById(expectedId);
 
         Assertions.assertNotNull(learner);
@@ -64,10 +65,8 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    void getByIdNegativeTest() {
-        Learner learner = learnerRepository.getById(15L);
-
-        Assertions.assertNull(learner);
+    void getByIdThrowsException() {
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> learnerRepository.getById(100L));
     }
 
     @Test
@@ -91,7 +90,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    void updateTest() {
+    void updateTest() throws ObjectNotFoundException{
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         Long expectedId = 6L;
@@ -108,7 +107,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    void addTest() {
+    void addTest() throws ObjectNotFoundException{
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         ClassRoom classRoom = new ClassRoom(2L, "1б", null);
@@ -131,7 +130,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    void addTestWithClassRoomNull() {
+    void addTestWithClassRoomNull() throws ObjectNotFoundException{
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
 
@@ -152,7 +151,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    void updateWithClassRoomTest() {
+    void updateWithClassRoomTest() throws ObjectNotFoundException{
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         Long expectedId = 6L;
@@ -188,7 +187,7 @@ public class LearnerRepositoryImplTest {
     }
 
     @Test
-    void updateWithExceptionTest() {
+    void updateWithExceptionTest() throws ObjectNotFoundException{
         String expectedFirstName = "UpdateFirstName";
         String expectedLastName = "UpdateLastName";
         ClassRoom classRoom = new ClassRoom(19L, "1u", null);

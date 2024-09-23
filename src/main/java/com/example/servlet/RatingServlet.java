@@ -8,6 +8,7 @@ import com.example.servlet.dto.RatingResponseDto;
 import com.example.servlet.mapper.RatingDtoMapper;
 import com.example.servlet.mapper.impl.RatingDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -110,11 +111,11 @@ public class RatingServlet extends HttpServlet {
         int statusCode = HttpServletResponse.SC_NOT_FOUND;
 
         RatingRequestDto ratingRequestDto = objectMapper.readValue(req.getReader(), RatingRequestDto.class);
-        Rating rating = service.getById(ratingRequestDto.getId());
-        if (rating != null) {
+        try {
+            Rating rating = service.getById(ratingRequestDto.getId());
             service.update(mapper.map(ratingRequestDto));
             statusCode = HttpServletResponse.SC_OK;
-        } else {
+        } catch (ObjectNotFoundException e) {
             respString = NOT_FOUND_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);

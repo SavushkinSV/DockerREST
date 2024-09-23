@@ -5,6 +5,7 @@ import com.example.repository.ClassRoomRepository;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
 import com.example.services.ClassRoomService;
 import com.example.services.impl.ClassRoomServiceImpl;
+import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
@@ -49,7 +50,7 @@ import java.lang.reflect.Field;
     }
 
     @Test
-    void getByIdTest() {
+    void getByIdTest() throws ObjectNotFoundException {
         Long expectedId = mockClassRoom.getId();
         Mockito.doReturn(mockClassRoom).when(repository).getById(Mockito.anyLong());
 

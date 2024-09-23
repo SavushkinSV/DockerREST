@@ -5,6 +5,7 @@ import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.services.LearnerService;
 import com.example.services.impl.LearnerServiceImpl;
+import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
@@ -44,7 +45,7 @@ class LearnerServiceImplTest {
     }
 
     @Test
-    void getByIdTest() {
+    void getByIdTest() throws ObjectNotFoundException {
         Long expectedId = 1L;
         Learner mockLearner = new Learner(
                 expectedId,

@@ -4,6 +4,7 @@ import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 import com.example.repository.impl.RatingRepositoryImpl;
 import com.example.services.RatingService;
+import jakarta.ejb.ObjectNotFoundException;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class RatingServiceImpl implements RatingService {
      * @return сущность
      */
     @Override
-    public Rating getById(Long id) {
+    public Rating getById(Long id) throws ObjectNotFoundException {
         return ratingRepository.getById(id);
     }
 

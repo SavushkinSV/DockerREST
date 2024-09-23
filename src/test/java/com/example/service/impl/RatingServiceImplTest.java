@@ -5,6 +5,7 @@ import com.example.repository.RatingRepository;
 import com.example.repository.impl.RatingRepositoryImpl;
 import com.example.services.RatingService;
 import com.example.services.impl.RatingServiceImpl;
+import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
@@ -52,7 +53,7 @@ class RatingServiceImplTest {
     }
 
     @Test
-    void getByIdTest() {
+    void getByIdTest() throws ObjectNotFoundException {
         Long expectedId = mockRating.getId();
         Mockito.doReturn(mockRating).when(repository).getById(Mockito.anyLong());
 

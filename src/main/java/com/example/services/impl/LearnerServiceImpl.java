@@ -4,6 +4,7 @@ import com.example.model.Learner;
 import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.services.LearnerService;
+import jakarta.ejb.ObjectNotFoundException;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class LearnerServiceImpl implements LearnerService {
      * @return сущность
      */
     @Override
-    public Learner getById(Long id) {
+    public Learner getById(Long id) throws ObjectNotFoundException {
         return learnerRepository.getById(id);
     }
 
