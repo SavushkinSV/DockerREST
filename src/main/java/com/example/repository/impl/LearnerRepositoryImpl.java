@@ -84,7 +84,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
             if (resultSet.next()) {
                 leaner = createLearner(resultSet);
             } else {
-                throw new ObjectNotFoundException("Learner not found.");
+                throw new ObjectNotFoundException("Learner with id " + id + " not found");
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());

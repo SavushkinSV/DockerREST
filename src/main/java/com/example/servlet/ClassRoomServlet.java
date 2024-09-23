@@ -7,6 +7,7 @@ import com.example.servlet.dto.ClassRoomResponseDto;
 import com.example.servlet.mapper.ClassRoomDtoMapper;
 import com.example.servlet.mapper.impl.ClassRoomDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,16 +35,13 @@ public class ClassRoomServlet extends HttpServlet {
             String[] reqString = req.getPathInfo().split("/");
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
+
                 ClassRoom classRoom = service.getById(id);
-                if (classRoom != null) {
-                    ClassRoomResponseDto responseDto = mapper.map(classRoom);
-                    // return our DTO
-                    statusCode = HttpServletResponse.SC_OK;
-                    respString = objectMapper.writeValueAsString(responseDto);
-                } else {
-                    statusCode = HttpServletResponse.SC_NOT_FOUND;
-                    respString = "ClassRoom not found";
-                }
+                ClassRoomResponseDto responseDto = mapper.map(classRoom);
+                // return our DTO
+                statusCode = HttpServletResponse.SC_OK;
+                respString = objectMapper.writeValueAsString(responseDto);
+
             } else if (reqString.length == 0) {
                 List<ClassRoom> classRoomList = service.getAll();
                 // return our DTO
@@ -51,6 +49,9 @@ public class ClassRoomServlet extends HttpServlet {
                 statusCode = HttpServletResponse.SC_OK;
                 respString = objectMapper.writeValueAsString(responseDtoList);
             }
+        } catch (ObjectNotFoundException e) {
+            statusCode = HttpServletResponse.SC_NOT_FOUND;
+            respString = "ClassRoom not found";
         } catch (Exception e) {
             statusCode = HttpServletResponse.SC_BAD_REQUEST;
             respString = "Bad request.";

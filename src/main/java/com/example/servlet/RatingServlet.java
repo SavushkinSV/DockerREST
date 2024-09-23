@@ -39,14 +39,10 @@ public class RatingServlet extends HttpServlet {
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
                 Rating rating = service.getById(id);
-                if (rating != null) {
-                    RatingResponseDto responseDto = mapper.map(rating);
-                    statusCode = HttpServletResponse.SC_OK;
-                    respString = objectMapper.writeValueAsString(responseDto);
-                } else {
-                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    respString = NOT_FOUND_REQUEST_MESSAGE;
-                }
+                RatingResponseDto responseDto = mapper.map(rating);
+                statusCode = HttpServletResponse.SC_OK;
+                respString = objectMapper.writeValueAsString(responseDto);
+
             } else if (reqString.length == 0) {
                 List<Rating> ratingList = service.getAll();
                 // return our DTO
@@ -54,6 +50,9 @@ public class RatingServlet extends HttpServlet {
                 respString = objectMapper.writeValueAsString(responseDtos);
                 statusCode = HttpServletResponse.SC_OK;
             }
+        } catch (ObjectNotFoundException e) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            respString = NOT_FOUND_REQUEST_MESSAGE;
         } catch (Exception e) {
             respString = "Bad request.";
         }
@@ -112,7 +111,7 @@ public class RatingServlet extends HttpServlet {
 
         RatingRequestDto ratingRequestDto = objectMapper.readValue(req.getReader(), RatingRequestDto.class);
         try {
-            Rating rating = service.getById(ratingRequestDto.getId());
+            service.getById(ratingRequestDto.getId());
             service.update(mapper.map(ratingRequestDto));
             statusCode = HttpServletResponse.SC_OK;
         } catch (ObjectNotFoundException e) {
