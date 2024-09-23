@@ -2,6 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.exception.ObjectNotFoundException;
 import com.example.exception.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.model.Learner;
@@ -72,7 +73,7 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      * @return сущность
      */
     @Override
-    public Learner getById(Long id) {
+    public Learner getById(Long id) throws ObjectNotFoundException {
         final String FIND_BY_ID_SQL = "SELECT id, first_name, last_name, class_id FROM learners WHERE id=?;";
         Learner leaner = null;
         try (Connection connection = connectionManager.getConnection();
@@ -82,7 +83,8 @@ public class LearnerRepositoryImpl implements LearnerRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 leaner = createLearner(resultSet);
-
+            } else {
+                throw new ObjectNotFoundException("Learner with id " + id + " not found");
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());
@@ -168,7 +170,13 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     private static Learner createLearner(ResultSet resultSet) throws SQLException {
         Long learnerId = resultSet.getLong("id");
-        ClassRoom classRoom = classRoomRepository.getById(resultSet.getLong("class_id"));
+
+        ClassRoom classRoom;
+        try {
+            classRoom = classRoomRepository.getById(resultSet.getLong("class_id"));
+        } catch (ObjectNotFoundException e) {
+            classRoom = null;
+        }
 
         return new Learner(learnerId, resultSet.getString("first_name"), resultSet.getString("last_name"), classRoom, null);
     }

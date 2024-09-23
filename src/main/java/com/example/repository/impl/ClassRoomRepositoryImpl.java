@@ -2,6 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.exception.ObjectNotFoundException;
 import com.example.exception.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
@@ -76,7 +77,7 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
     }
 
     @Override
-    public ClassRoom getById(Long id) {
+    public ClassRoom getById(Long id) throws ObjectNotFoundException {
         String findByIdSql = "SELECT id, code FROM class_rooms WHERE id=?;";
         ClassRoom classRoom = null;
 
@@ -87,6 +88,8 @@ public class ClassRoomRepositoryImpl implements ClassRoomRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 classRoom = createClassRoom(resultSet);//
+            } else {
+                throw new ObjectNotFoundException("ClassRoom with id " + id + " not found");
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());

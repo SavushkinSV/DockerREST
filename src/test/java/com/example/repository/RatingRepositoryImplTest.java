@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.repository.impl.RatingRepositoryImpl;
 import com.example.util.PropertiesUtil;
@@ -55,7 +56,7 @@ public class RatingRepositoryImplTest {
 
     @ParameterizedTest
     @CsvSource(value = {"1", "3", "5"})
-    public void getByIdTest(Long expectedId) {
+    void getByIdTest(Long expectedId) throws ObjectNotFoundException {
         Rating rating = ratingRepository.getById(expectedId);
 
         Assertions.assertNotNull(rating);
@@ -63,14 +64,12 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void getByIdNegativeTest() {
-        Rating rating = ratingRepository.getById(15L);
-
-        Assertions.assertNull(rating);
+    void getByIdThrowsExceptionTest() {
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> ratingRepository.getById(15L));
     }
 
     @Test
-    public void getAllTest() {
+    void getAllTest() {
         int expectedSize = 9;
         int resultSize = ratingRepository.getAll().size();
 
@@ -78,7 +77,7 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void deleteByIdTest() {
+    void deleteByIdTest() {
         boolean expected = true;
         int expectedSize = ratingRepository.getAll().size() - 1;
 
@@ -90,7 +89,7 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void deleteByIdNegativeTest() {
+    void deleteByIdNegativeTest() {
         boolean expected = false;
         int expectedSize = ratingRepository.getAll().size();
 
@@ -102,7 +101,7 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void addTest() {
+    void addTest() throws ObjectNotFoundException {
         String expectedDate = "2024-12-31";
         Integer expectedValue = 0;
         String expectedSubjectName = "Test";
@@ -122,7 +121,7 @@ public class RatingRepositoryImplTest {
     }
 
     @Test
-    public void updateTest() {
+    void updateTest() throws ObjectNotFoundException {
         String expectedDate = "2001-12-01";
         Integer expectedValue = 1;
         String expectedSubjectName = "Test";

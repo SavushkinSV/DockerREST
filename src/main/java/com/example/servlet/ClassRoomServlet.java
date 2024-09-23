@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.services.ClassRoomService;
 import com.example.services.impl.ClassRoomServiceImpl;
@@ -35,15 +36,10 @@ public class ClassRoomServlet extends HttpServlet {
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
                 ClassRoom classRoom = service.getById(id);
-                if (classRoom != null) {
-                    ClassRoomResponseDto responseDto = mapper.map(classRoom);
-                    // return our DTO
-                    statusCode = HttpServletResponse.SC_OK;
-                    respString = objectMapper.writeValueAsString(responseDto);
-                } else {
-                    statusCode = HttpServletResponse.SC_NOT_FOUND;
-                    respString = "ClassRoom not found";
-                }
+                ClassRoomResponseDto responseDto = mapper.map(classRoom);
+                // return our DTO
+                statusCode = HttpServletResponse.SC_OK;
+                respString = objectMapper.writeValueAsString(responseDto);
             } else if (reqString.length == 0) {
                 List<ClassRoom> classRoomList = service.getAll();
                 // return our DTO
@@ -51,10 +47,14 @@ public class ClassRoomServlet extends HttpServlet {
                 statusCode = HttpServletResponse.SC_OK;
                 respString = objectMapper.writeValueAsString(responseDtoList);
             }
+        } catch (ObjectNotFoundException e) {
+            statusCode = HttpServletResponse.SC_NOT_FOUND;
+            respString = "ClassRoom not found";
         } catch (Exception e) {
             statusCode = HttpServletResponse.SC_BAD_REQUEST;
             respString = "Bad request.";
         }
+
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
         printWriter.write(respString);

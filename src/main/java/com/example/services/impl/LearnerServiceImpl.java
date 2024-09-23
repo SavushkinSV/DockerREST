@@ -1,5 +1,6 @@
 package com.example.services.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Learner;
 import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
@@ -29,7 +30,7 @@ public class LearnerServiceImpl implements LearnerService {
      * @return сущность
      */
     @Override
-    public Learner getById(Long id) {
+    public Learner getById(Long id) throws ObjectNotFoundException {
         return learnerRepository.getById(id);
     }
 

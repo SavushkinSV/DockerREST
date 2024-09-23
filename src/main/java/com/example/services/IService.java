@@ -1,9 +1,11 @@
 package com.example.services;
 
+import com.example.exception.ObjectNotFoundException;
+
 import java.util.List;
 
 public interface IService<T> {
-    T getById(Long id);
+    T getById(Long id) throws ObjectNotFoundException;
 
     List<T> getAll();
 

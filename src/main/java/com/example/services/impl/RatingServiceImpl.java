@@ -1,5 +1,6 @@
 package com.example.services.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 import com.example.repository.impl.RatingRepositoryImpl;
@@ -29,7 +30,7 @@ public class RatingServiceImpl implements RatingService {
      * @return сущность
      */
     @Override
-    public Rating getById(Long id) {
+    public Rating getById(Long id) throws ObjectNotFoundException {
         return ratingRepository.getById(id);
     }
 
