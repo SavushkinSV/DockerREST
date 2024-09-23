@@ -1,6 +1,6 @@
 package com.example.services;
 
-import jakarta.ejb.ObjectNotFoundException;
+import com.example.exception.ObjectNotFoundException;
 
 import java.util.List;
 

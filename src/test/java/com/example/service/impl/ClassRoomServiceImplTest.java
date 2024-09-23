@@ -1,11 +1,11 @@
 package com.example.service.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
 import com.example.services.ClassRoomService;
 import com.example.services.impl.ClassRoomServiceImpl;
-import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 

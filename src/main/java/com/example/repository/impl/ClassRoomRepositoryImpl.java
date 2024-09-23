@@ -2,10 +2,10 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.exception.ObjectNotFoundException;
 import com.example.exception.RepositoryException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
-import jakarta.ejb.ObjectNotFoundException;
 
 
 import java.sql.*;

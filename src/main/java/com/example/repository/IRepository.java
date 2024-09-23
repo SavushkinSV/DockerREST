@@ -1,6 +1,8 @@
 package com.example.repository;
 
-import jakarta.ejb.ObjectNotFoundException;
+
+
+import com.example.exception.ObjectNotFoundException;
 
 import java.util.List;
 

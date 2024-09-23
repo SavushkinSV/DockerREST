@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.model.Learner;
 import com.example.model.Rating;
@@ -7,7 +8,6 @@ import com.example.services.LearnerService;
 import com.example.services.impl.LearnerServiceImpl;
 import com.example.servlet.dto.LearnerRequestDto;
 import com.google.gson.Gson;
-import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.*;
@@ -89,9 +89,9 @@ class LearnerServletTest {
     }
 
     @Test
-    void doGetByIdWithNullTest() throws IOException, ObjectNotFoundException {
+    void doGetByIdThrowsExceptionTest() throws IOException, ObjectNotFoundException {
         Mockito.doReturn("learner/2").when(mockReq).getPathInfo();
-        Mockito.doReturn(null).when(service).getById(Mockito.anyLong());
+        Mockito.when(service.getById(Mockito.anyLong())).thenThrow(ObjectNotFoundException.class);
 
         servlet.doGet(mockReq, mockResp);
 

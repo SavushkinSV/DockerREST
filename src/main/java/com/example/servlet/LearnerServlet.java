@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Learner;
 import com.example.services.LearnerService;
 import com.example.services.impl.LearnerServiceImpl;
@@ -8,7 +9,6 @@ import com.example.servlet.dto.LearnerResponseDto;
 import com.example.servlet.mapper.LearnerDtoMapper;
 import com.example.servlet.mapper.impl.LearnerDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.services.ClassRoomService;
 import com.example.services.impl.ClassRoomServiceImpl;
@@ -7,7 +8,6 @@ import com.example.servlet.dto.ClassRoomResponseDto;
 import com.example.servlet.mapper.ClassRoomDtoMapper;
 import com.example.servlet.mapper.impl.ClassRoomDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,10 +1,10 @@
 package com.example.services.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 import com.example.repository.impl.RatingRepositoryImpl;
 import com.example.services.RatingService;
-import jakarta.ejb.ObjectNotFoundException;
 
 import java.util.List;
 

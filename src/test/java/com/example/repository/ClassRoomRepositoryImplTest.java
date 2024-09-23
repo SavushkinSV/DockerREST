@@ -1,17 +1,17 @@
 package com.example.repository;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
-import com.example.model.Learner;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
 import com.example.util.PropertiesUtil;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
-import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.ext.ScriptUtils;
 import org.testcontainers.jdbc.JdbcDatabaseDelegate;
@@ -65,10 +65,8 @@ public class ClassRoomRepositoryImplTest {
     }
 
     @Test
-    void getByIdNegativeTest() throws ObjectNotFoundException{
-        ClassRoom classRoom = repository.getById(15L);
-
-        Assertions.assertNull(classRoom);
+    void getByIdThrowsExceptionTest() {
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> repository.getById(15L));
     }
 
     @Test

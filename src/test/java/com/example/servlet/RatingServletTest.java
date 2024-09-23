@@ -1,11 +1,11 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.services.RatingService;
 import com.example.services.impl.RatingServiceImpl;
 import com.example.servlet.dto.RatingRequestDto;
 import com.google.gson.Gson;
-import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.*;
@@ -81,9 +81,9 @@ class RatingServletTest {
     }
 
     @Test
-    void doGetByIdWithNullTest() throws IOException, ObjectNotFoundException {
+    void doGetByIdThrowsExceptionTest() throws IOException, ObjectNotFoundException {
         Mockito.doReturn("rating/2").when(mockReq).getPathInfo();
-        Mockito.doReturn(null).when(service).getById(Mockito.anyLong());
+        Mockito.when(service.getById(Mockito.anyLong())).thenThrow(ObjectNotFoundException.class);
 
         servlet.doGet(mockReq, mockResp);
 

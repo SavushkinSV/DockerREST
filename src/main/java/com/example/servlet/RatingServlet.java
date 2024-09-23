@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.services.RatingService;
 import com.example.services.impl.RatingServiceImpl;
@@ -8,7 +9,6 @@ import com.example.servlet.dto.RatingResponseDto;
 import com.example.servlet.mapper.RatingDtoMapper;
 import com.example.servlet.mapper.impl.RatingDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ejb.ObjectNotFoundException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

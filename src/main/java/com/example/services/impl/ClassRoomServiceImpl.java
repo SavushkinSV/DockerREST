@@ -1,10 +1,10 @@
 package com.example.services.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
 import com.example.services.ClassRoomService;
-import jakarta.ejb.ObjectNotFoundException;
 
 import java.util.List;
 

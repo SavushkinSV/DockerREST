@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.repository.impl.RatingRepositoryImpl;
 import com.example.util.PropertiesUtil;
@@ -7,7 +8,6 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
-import jakarta.ejb.ObjectNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

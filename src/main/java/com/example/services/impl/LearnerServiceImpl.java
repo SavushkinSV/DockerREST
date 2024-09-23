@@ -1,10 +1,10 @@
 package com.example.services.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Learner;
 import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
 import com.example.services.LearnerService;
-import jakarta.ejb.ObjectNotFoundException;
 
 import java.util.List;
 
