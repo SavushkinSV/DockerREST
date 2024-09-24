@@ -1,7 +1,7 @@
 package com.example.repository;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
-import com.example.model.Learner;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
 import com.example.util.PropertiesUtil;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -56,7 +56,7 @@ public class ClassRoomRepositoryImplTest {
 
     @ParameterizedTest
     @CsvSource(value = {"1", "3", "5"})
-    void getByIdTest(Long expectedId) {
+    void getByIdTest(Long expectedId) throws ObjectNotFoundException {
         ClassRoom classRoom = repository.getById(expectedId);
 
         Assertions.assertNotNull(classRoom);
@@ -64,10 +64,8 @@ public class ClassRoomRepositoryImplTest {
     }
 
     @Test
-    void getByIdNegativeTest() {
-        ClassRoom classRoom = repository.getById(15L);
-
-        Assertions.assertNull(classRoom);
+    void getByIdThrowsExceptionTest() {
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> repository.getById(15L));
     }
 
     @Test
@@ -83,7 +81,7 @@ public class ClassRoomRepositoryImplTest {
     }
 
     @Test
-    void updateTest() {
+    void updateTest() throws ObjectNotFoundException{
         String expectedCode = "10б";
         Long expectedId = 5L;
 
@@ -97,7 +95,7 @@ public class ClassRoomRepositoryImplTest {
     }
 
     @Test
-    void addTest() {
+    void addTest() throws ObjectNotFoundException{
         String expectedCode = "10б";
         ClassRoom classRoom = new ClassRoom(null, expectedCode, null);
 

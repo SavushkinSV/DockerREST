@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
@@ -49,7 +50,7 @@ import java.lang.reflect.Field;
     }
 
     @Test
-    void getByIdTest() {
+    void getByIdTest() throws ObjectNotFoundException {
         Long expectedId = mockClassRoom.getId();
         Mockito.doReturn(mockClassRoom).when(repository).getById(Mockito.anyLong());
 

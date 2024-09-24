@@ -3,6 +3,7 @@ package com.example.model;
 import com.example.repository.RatingRepository;
 import com.example.repository.impl.RatingRepositoryImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class Learner {
     private String firstName;
     private String lastName;
     private ClassRoom classRoom;
-    private List<Rating> ratingList;
+    private List<Rating> ratingList = new ArrayList<>();
 
     private static final RatingRepository ratingRepository = RatingRepositoryImpl.getInstance();
 
@@ -64,14 +65,16 @@ public class Learner {
     }
 
     public List<Rating> getRatingList() {
-        if (this.ratingList == null) {
+        if (this.ratingList.isEmpty()) {
             this.ratingList = ratingRepository.getAllByLearnerId(this.id);
         }
         return ratingList;
     }
 
     public void setRatingList(List<Rating> ratingtList) {
-        this.ratingList = ratingtList;
+        if (ratingtList != null) {
+            this.ratingList = ratingtList;
+        }
     }
 
 }

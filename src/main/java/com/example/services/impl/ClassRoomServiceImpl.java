@@ -1,5 +1,6 @@
 package com.example.services.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.repository.ClassRoomRepository;
 import com.example.repository.impl.ClassRoomRepositoryImpl;
@@ -8,8 +9,8 @@ import com.example.services.ClassRoomService;
 import java.util.List;
 
 public class ClassRoomServiceImpl implements ClassRoomService {
-    private static final ClassRoomRepository repository = ClassRoomRepositoryImpl.getInstance();
     private static ClassRoomService instance;
+    private static final ClassRoomRepository repository = ClassRoomRepositoryImpl.getInstance();
 
     private ClassRoomServiceImpl() {
     }
@@ -23,7 +24,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
-    public ClassRoom getById(Long id) {
+    public ClassRoom getById(Long id) throws ObjectNotFoundException {
         return repository.getById(id);
     }
 

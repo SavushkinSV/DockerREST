@@ -52,6 +52,8 @@ public class ClassRoom {
     }
 
     public void setLearnerList(List<Learner> learnerList) {
-        this.learnerList = learnerList;
+        if (learnerList != null) {
+            this.learnerList = learnerList;
+        }
     }
 }

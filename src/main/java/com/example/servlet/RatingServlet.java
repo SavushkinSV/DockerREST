@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.services.RatingService;
 import com.example.services.impl.RatingServiceImpl;
@@ -19,13 +20,16 @@ import java.util.List;
 
 @WebServlet(name = "RatingServlet", value = "/rating/*")
 public class RatingServlet extends HttpServlet {
-    private static final String NOT_FOUND_REQUEST_MESSAGE = "Rating not found.";
-
-    private static final RatingService service = RatingServiceImpl.getInstance();
-    private static final RatingDtoMapper mapper = RatingDtoMapperImpl.getInstance();
+    private final transient RatingService service;
+    private final transient RatingDtoMapper mapper;
     private final ObjectMapper objectMapper;
 
+    private static final String NOT_FOUND_REQUEST_MESSAGE = "Rating not found.";
+    private static final String BAD_REQUEST_MESSAGE = "Bad request.";
+
     public RatingServlet() {
+        service = RatingServiceImpl.getInstance();
+        mapper = RatingDtoMapperImpl.getInstance();
         this.objectMapper = new ObjectMapper();
     }
 
@@ -38,14 +42,10 @@ public class RatingServlet extends HttpServlet {
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
                 Rating rating = service.getById(id);
-                if (rating != null) {
-                    RatingResponseDto responseDto = mapper.map(rating);
-                    statusCode = HttpServletResponse.SC_OK;
-                    respString = objectMapper.writeValueAsString(responseDto);
-                } else {
-                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    respString = NOT_FOUND_REQUEST_MESSAGE;
-                }
+                RatingResponseDto responseDto = mapper.map(rating);
+                statusCode = HttpServletResponse.SC_OK;
+                respString = objectMapper.writeValueAsString(responseDto);
+
             } else if (reqString.length == 0) {
                 List<Rating> ratingList = service.getAll();
                 // return our DTO
@@ -53,8 +53,11 @@ public class RatingServlet extends HttpServlet {
                 respString = objectMapper.writeValueAsString(responseDtos);
                 statusCode = HttpServletResponse.SC_OK;
             }
+        } catch (ObjectNotFoundException e) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            respString = NOT_FOUND_REQUEST_MESSAGE;
         } catch (Exception e) {
-            respString = "Bad request.";
+            respString = BAD_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
@@ -96,7 +99,7 @@ public class RatingServlet extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            respString = "Bad request.";
+            respString = BAD_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
@@ -110,11 +113,11 @@ public class RatingServlet extends HttpServlet {
         int statusCode = HttpServletResponse.SC_NOT_FOUND;
 
         RatingRequestDto ratingRequestDto = objectMapper.readValue(req.getReader(), RatingRequestDto.class);
-        Rating rating = service.getById(ratingRequestDto.getId());
-        if (rating != null) {
+        try {
+            service.getById(ratingRequestDto.getId());
             service.update(mapper.map(ratingRequestDto));
             statusCode = HttpServletResponse.SC_OK;
-        } else {
+        } catch (ObjectNotFoundException e) {
             respString = NOT_FOUND_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
@@ -122,7 +125,6 @@ public class RatingServlet extends HttpServlet {
         printWriter.write(respString);
         printWriter.flush();
     }
-
 
     /**
      * Устанавливает заголовок и тип содержимого.

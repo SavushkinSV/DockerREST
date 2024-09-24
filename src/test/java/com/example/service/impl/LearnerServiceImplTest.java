@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Learner;
 import com.example.repository.LearnerRepository;
 import com.example.repository.impl.LearnerRepositoryImpl;
@@ -44,7 +45,7 @@ class LearnerServiceImplTest {
     }
 
     @Test
-    void getByIdTest() {
+    void getByIdTest() throws ObjectNotFoundException {
         Long expectedId = 1L;
         Learner mockLearner = new Learner(
                 expectedId,

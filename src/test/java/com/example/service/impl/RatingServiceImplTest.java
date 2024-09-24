@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
 import com.example.repository.impl.RatingRepositoryImpl;
@@ -52,7 +53,7 @@ class RatingServiceImplTest {
     }
 
     @Test
-    void getByIdTest() {
+    void getByIdTest() throws ObjectNotFoundException {
         Long expectedId = mockRating.getId();
         Mockito.doReturn(mockRating).when(repository).getById(Mockito.anyLong());
 

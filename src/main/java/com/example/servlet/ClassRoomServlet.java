@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.ClassRoom;
 import com.example.services.ClassRoomService;
 import com.example.services.impl.ClassRoomServiceImpl;
@@ -18,11 +19,13 @@ import java.util.List;
 
 @WebServlet(name = "ClassRoomServlet", value = "/class_room/*")
 public class ClassRoomServlet extends HttpServlet {
-    private static final ClassRoomService service = ClassRoomServiceImpl.getInstance();
-    private static final ClassRoomDtoMapper mapper = ClassRoomDtoMapperImpl.getInstance();
+    private final transient ClassRoomService service;
+    private final transient ClassRoomDtoMapper mapper;
     private final ObjectMapper objectMapper;
 
     public ClassRoomServlet() {
+        service = ClassRoomServiceImpl.getInstance();
+        mapper = ClassRoomDtoMapperImpl.getInstance();
         this.objectMapper = new ObjectMapper();
     }
 
@@ -34,16 +37,13 @@ public class ClassRoomServlet extends HttpServlet {
             String[] reqString = req.getPathInfo().split("/");
             if (reqString.length == 2) {
                 Long id = Long.parseLong(reqString[1]);
+
                 ClassRoom classRoom = service.getById(id);
-                if (classRoom != null) {
-                    ClassRoomResponseDto responseDto = mapper.map(classRoom);
-                    // return our DTO
-                    statusCode = HttpServletResponse.SC_OK;
-                    respString = objectMapper.writeValueAsString(responseDto);
-                } else {
-                    statusCode = HttpServletResponse.SC_NOT_FOUND;
-                    respString = "ClassRoom not found";
-                }
+                ClassRoomResponseDto responseDto = mapper.map(classRoom);
+                // return our DTO
+                statusCode = HttpServletResponse.SC_OK;
+                respString = objectMapper.writeValueAsString(responseDto);
+
             } else if (reqString.length == 0) {
                 List<ClassRoom> classRoomList = service.getAll();
                 // return our DTO
@@ -51,6 +51,9 @@ public class ClassRoomServlet extends HttpServlet {
                 statusCode = HttpServletResponse.SC_OK;
                 respString = objectMapper.writeValueAsString(responseDtoList);
             }
+        } catch (ObjectNotFoundException e) {
+            statusCode = HttpServletResponse.SC_NOT_FOUND;
+            respString = "ClassRoom not found";
         } catch (Exception e) {
             statusCode = HttpServletResponse.SC_BAD_REQUEST;
             respString = "Bad request.";

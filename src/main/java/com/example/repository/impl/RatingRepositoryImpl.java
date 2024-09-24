@@ -2,6 +2,7 @@ package com.example.repository.impl;
 
 import com.example.db.ConnectionManagerImpl;
 import com.example.db.IConnectionManager;
+import com.example.exception.ObjectNotFoundException;
 import com.example.exception.RepositoryException;
 import com.example.model.Rating;
 import com.example.repository.RatingRepository;
@@ -115,9 +116,9 @@ public class RatingRepositoryImpl implements RatingRepository {
      * @return сущность
      */
     @Override
-    public Rating getById(Long id) {
+    public Rating getById(Long id) throws ObjectNotFoundException {
+        Rating rating;
         String getByIdSql = "SELECT id, data, value, subject_name FROM ratings WHERE id=?;";
-        Rating rating = null;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(getByIdSql);) {
 
@@ -125,6 +126,8 @@ public class RatingRepositoryImpl implements RatingRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 rating = createRating(resultSet);
+            } else {
+                throw new ObjectNotFoundException("Rating not found.");
             }
         } catch (SQLException e) {
             throw new RepositoryException(e.getMessage());

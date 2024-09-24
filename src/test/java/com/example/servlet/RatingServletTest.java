@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.exception.ObjectNotFoundException;
 import com.example.model.Rating;
 import com.example.services.RatingService;
 import com.example.services.impl.RatingServiceImpl;
@@ -69,7 +70,7 @@ class RatingServletTest {
     }
 
     @Test
-    void doGetByIdTest() throws IOException {
+    void doGetByIdTest() throws IOException, ObjectNotFoundException {
         Mockito.doReturn("rating/1").when(mockReq).getPathInfo();
         Mockito.doReturn(rating).when(service).getById(Mockito.anyLong());
 
@@ -80,9 +81,9 @@ class RatingServletTest {
     }
 
     @Test
-    void doGetByIdWithNullTest() throws IOException {
+    void doGetByIdThrowsExceptionTest() throws IOException, ObjectNotFoundException {
         Mockito.doReturn("rating/2").when(mockReq).getPathInfo();
-        Mockito.doReturn(null).when(service).getById(Mockito.anyLong());
+        Mockito.when(service.getById(Mockito.anyLong())).thenThrow(ObjectNotFoundException.class);
 
         servlet.doGet(mockReq, mockResp);
 
@@ -134,7 +135,7 @@ class RatingServletTest {
     }
 
     @Test
-    void doPutTest() throws IOException {
+    void doPutTest() throws IOException, ObjectNotFoundException {
         BufferedReader mockReader = new BufferedReader(new StringReader(gson.toJson(dto)));
         Mockito.doReturn(mockReader).when(mockReq).getReader();
         Mockito.doReturn(rating).when(service).getById(Mockito.anyLong());
@@ -146,10 +147,10 @@ class RatingServletTest {
     }
 
     @Test
-    void doPutWithNullTest() throws IOException {
+    void doPutThrowsExceptionTest() throws IOException, ObjectNotFoundException {
         BufferedReader mockReader = new BufferedReader(new StringReader(gson.toJson(dto)));
         Mockito.doReturn(mockReader).when(mockReq).getReader();
-        Mockito.doReturn(null).when(service).getById(Mockito.anyLong());
+        Mockito.when(service.getById(Mockito.anyLong())).thenThrow(ObjectNotFoundException.class);
 
         servlet.doPut(mockReq, mockResp);
 
