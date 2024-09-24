@@ -1,7 +1,5 @@
 package com.example.repository;
 
-
-
 import com.example.exception.ObjectNotFoundException;
 
 import java.util.List;

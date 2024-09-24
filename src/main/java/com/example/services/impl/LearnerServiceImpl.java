@@ -9,8 +9,8 @@ import com.example.services.LearnerService;
 import java.util.List;
 
 public class LearnerServiceImpl implements LearnerService {
-    private static final LearnerRepository learnerRepository = LearnerRepositoryImpl.getInstance();
     private static LearnerService instance;
+    private static final LearnerRepository learnerRepository = LearnerRepositoryImpl.getInstance();
 
     private LearnerServiceImpl() {
     }

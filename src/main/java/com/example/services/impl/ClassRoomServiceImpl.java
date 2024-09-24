@@ -9,8 +9,8 @@ import com.example.services.ClassRoomService;
 import java.util.List;
 
 public class ClassRoomServiceImpl implements ClassRoomService {
-    private static final ClassRoomRepository repository = ClassRoomRepositoryImpl.getInstance();
     private static ClassRoomService instance;
+    private static final ClassRoomRepository repository = ClassRoomRepositoryImpl.getInstance();
 
     private ClassRoomServiceImpl() {
     }

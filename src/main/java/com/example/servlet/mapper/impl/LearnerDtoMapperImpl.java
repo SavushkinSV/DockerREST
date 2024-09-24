@@ -13,6 +13,7 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
     private static final ClassRoomDtoMapper classRoomDtoMapper = ClassRoomDtoMapperImpl.getInstance();
 
     private LearnerDtoMapperImpl() {
+
     }
 
     public static LearnerDtoMapper getInstance() {
@@ -65,11 +66,10 @@ public class LearnerDtoMapperImpl implements LearnerDtoMapper {
      */
     @Override
     public List<LearnerResponseDto> map(List<Learner> learnerList) {
-        if (learnerList == null) {
-            return null;
+        List<LearnerResponseDto> responseDtos = null;
+        if (learnerList != null) {
+            responseDtos = learnerList.stream().map(this::map).toList();
         }
-        List<LearnerResponseDto> responseDtos;
-        responseDtos = learnerList.stream().map(this::map).toList();
 
         return responseDtos;
     }

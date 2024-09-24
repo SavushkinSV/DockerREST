@@ -19,11 +19,13 @@ import java.util.List;
 
 @WebServlet(name = "ClassRoomServlet", value = "/class_room/*")
 public class ClassRoomServlet extends HttpServlet {
-    private static final ClassRoomService service = ClassRoomServiceImpl.getInstance();
-    private static final ClassRoomDtoMapper mapper = ClassRoomDtoMapperImpl.getInstance();
+    private final transient ClassRoomService service;
+    private final transient ClassRoomDtoMapper mapper;
     private final ObjectMapper objectMapper;
 
     public ClassRoomServlet() {
+        service = ClassRoomServiceImpl.getInstance();
+        mapper = ClassRoomDtoMapperImpl.getInstance();
         this.objectMapper = new ObjectMapper();
     }
 

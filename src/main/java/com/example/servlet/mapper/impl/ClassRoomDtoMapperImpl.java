@@ -10,9 +10,10 @@ import java.util.List;
 
 public class ClassRoomDtoMapperImpl implements ClassRoomDtoMapper {
     private static ClassRoomDtoMapperImpl instance;
-    private static LearnerDtoMapper learnerDtoMapper = LearnerDtoMapperImpl.getInstance();
+    private static final LearnerDtoMapper learnerDtoMapper = LearnerDtoMapperImpl.getInstance();
 
     private ClassRoomDtoMapperImpl() {
+        
     }
 
     public static ClassRoomDtoMapperImpl getInstance() {

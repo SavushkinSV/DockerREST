@@ -170,11 +170,11 @@ public class LearnerRepositoryImpl implements LearnerRepository {
      */
     private static Learner createLearner(ResultSet resultSet) throws SQLException {
         Long learnerId = resultSet.getLong("id");
-        ClassRoom classRoom = null;
+        ClassRoom classRoom;
         try {
             classRoom = classRoomRepository.getById(resultSet.getLong("class_id"));
         } catch (ObjectNotFoundException e) {
-            System.out.println("ClassRoom not found.");
+            classRoom = null;
         }
         return new Learner(learnerId, resultSet.getString("first_name"), resultSet.getString("last_name"), classRoom, null);
     }

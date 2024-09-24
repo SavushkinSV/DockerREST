@@ -20,13 +20,16 @@ import java.util.List;
 
 @WebServlet(name = "RatingServlet", value = "/rating/*")
 public class RatingServlet extends HttpServlet {
-    private static final String NOT_FOUND_REQUEST_MESSAGE = "Rating not found.";
-
-    private static final RatingService service = RatingServiceImpl.getInstance();
-    private static final RatingDtoMapper mapper = RatingDtoMapperImpl.getInstance();
+    private final transient RatingService service;
+    private final transient RatingDtoMapper mapper;
     private final ObjectMapper objectMapper;
 
+    private static final String NOT_FOUND_REQUEST_MESSAGE = "Rating not found.";
+    private static final String BAD_REQUEST_MESSAGE = "Bad request.";
+
     public RatingServlet() {
+        service = RatingServiceImpl.getInstance();
+        mapper = RatingDtoMapperImpl.getInstance();
         this.objectMapper = new ObjectMapper();
     }
 
@@ -54,7 +57,7 @@ public class RatingServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             respString = NOT_FOUND_REQUEST_MESSAGE;
         } catch (Exception e) {
-            respString = "Bad request.";
+            respString = BAD_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
@@ -96,7 +99,7 @@ public class RatingServlet extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            respString = "Bad request.";
+            respString = BAD_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
@@ -122,7 +125,6 @@ public class RatingServlet extends HttpServlet {
         printWriter.write(respString);
         printWriter.flush();
     }
-
 
     /**
      * Устанавливает заголовок и тип содержимого.

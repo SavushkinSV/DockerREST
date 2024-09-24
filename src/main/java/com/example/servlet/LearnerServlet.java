@@ -9,6 +9,7 @@ import com.example.servlet.dto.LearnerResponseDto;
 import com.example.servlet.mapper.LearnerDtoMapper;
 import com.example.servlet.mapper.impl.LearnerDtoMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,12 +21,16 @@ import java.util.List;
 
 @WebServlet(name = "LearnerServlet", value = "/learner/*")
 public class LearnerServlet extends HttpServlet {
-    private static final String NOT_FOUND_REQUEST_MESSAGE = "Learner not found.";
-    private static final LearnerService service = LearnerServiceImpl.getInstance();
-    private static final LearnerDtoMapper mapper = LearnerDtoMapperImpl.getInstance();
+    private final transient LearnerService service;
+    private final transient LearnerDtoMapper mapper;
     private final ObjectMapper objectMapper;
 
+    private static final String NOT_FOUND_REQUEST_MESSAGE = "Learner not found.";
+    private static final String BAD_REQUEST_MESSAGE = "Bad request.";
+
     public LearnerServlet() {
+        service = LearnerServiceImpl.getInstance();
+        mapper = LearnerDtoMapperImpl.getInstance();
         this.objectMapper = new ObjectMapper();
     }
 
@@ -51,10 +56,10 @@ public class LearnerServlet extends HttpServlet {
             }
         } catch (ObjectNotFoundException e) {
             statusCode = HttpServletResponse.SC_NOT_FOUND;
-            respString = "Learner not found";
+            respString = NOT_FOUND_REQUEST_MESSAGE;
         } catch (Exception e) {
             statusCode = HttpServletResponse.SC_BAD_REQUEST;
-            respString = "Bad request.";
+            respString = BAD_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
@@ -97,7 +102,7 @@ public class LearnerServlet extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            respString = "Bad request.";
+            respString = BAD_REQUEST_MESSAGE;
         }
         setJsonHeader(resp, statusCode);
         PrintWriter printWriter = resp.getWriter();
@@ -118,7 +123,7 @@ public class LearnerServlet extends HttpServlet {
         } catch (ObjectNotFoundException e) {
             respString = NOT_FOUND_REQUEST_MESSAGE;
         } catch (IOException e) {
-            respString = "Bad request";
+            respString = BAD_REQUEST_MESSAGE;
         }
 
         setJsonHeader(resp, statusCode);
